@@ -56,16 +56,16 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.005 80);
 
-  --primary: oklch(0.32 0.06 162);               /* deep emerald #0B3D2E */
+  --primary: oklch(0.285 0.062 24.7);            /* oxblood #441C1A */
   --primary-foreground: oklch(0.98 0.015 95);
-  --primary-dark: oklch(0.24 0.05 162);          /* #07291F */
+  --primary-dark: oklch(0.224 0.046 25.6);       /* #2E1210 */
 
   --accent: oklch(0.74 0.13 86);                 /* royal gold #C9A227 */
   --accent-foreground: oklch(0.2 0.02 80);
   --accent-soft: oklch(0.88 0.07 92);            /* champagne */
 
   --secondary: oklch(0.94 0.02 90);
-  --secondary-foreground: oklch(0.24 0.05 162);
+  --secondary-foreground: oklch(0.224 0.046 25.6);
 
   --muted: oklch(0.94 0.015 90);
   --muted-foreground: oklch(0.46 0.012 85);
@@ -77,10 +77,10 @@
   --input: oklch(0.88 0.018 88);
   --ring: oklch(0.74 0.13 86);
 
-  --chart-1: oklch(0.32 0.06 162);
+  --chart-1: oklch(0.285 0.062 24.7);
   --chart-2: oklch(0.74 0.13 86);
   --chart-3: oklch(0.88 0.07 92);
-  --chart-4: oklch(0.46 0.04 162);
+  --chart-4: oklch(0.46 0.045 25);
   --chart-5: oklch(0.6 0.1 86);
 }
 
@@ -90,12 +90,14 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-serif);
@@ -134,6 +136,34 @@
 
 @utility animate-fade-up {
   animation: fade-up 0.8s ease-out both;
+}
+
+@keyframes title-in {
+  from { opacity: 0; transform: translateY(26px); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@utility animate-title {
+  animation: title-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes menu-item-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@utility animate-menu-item {
+  animation: menu-item-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.55; }
+  70% { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@utility animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

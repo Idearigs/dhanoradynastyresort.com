@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ComponentType } from "react";
 import {
   Crown,
   Sparkles,
@@ -9,19 +10,87 @@ import {
   ConciergeBell,
   Check,
   ChevronDown,
+  ArrowRight,
 } from "lucide-react";
 import { SectionHeader } from "../components/site/Section";
 
 const HERO = "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80";
 
 const amenities = [
-  { Icon: Crown, title: "Royal Suites", desc: "Experience royal comfort in our elegantly designed suites with panoramic views and premium amenities." },
-  { Icon: Sparkles, title: "Ayurvedic Wellness", desc: "Indulge in rejuvenating treatments inspired by ancient wellness traditions in our world-class spa." },
-  { Icon: UtensilsCrossed, title: "Fine Dining", desc: "Savor exquisite cuisines prepared by master chefs in our signature restaurants." },
-  { Icon: Waves, title: "Infinity Pool", desc: "Relax in our stunning infinity pool with breathtaking views of the surrounding landscape." },
-  { Icon: Dumbbell, title: "Fitness Center", desc: "Maintain your wellness routine in our state-of-the-art fitness facility." },
-  { Icon: ConciergeBell, title: "Concierge", desc: "Our dedicated staff ensures every need is met with royal attention to detail." },
+  { Icon: Crown, title: "Royal Suites", desc: "Experience royal comfort in our elegantly designed suites with panoramic views and premium amenities.", img: "/images/amenities/royal-suites.webp" },
+  { Icon: Sparkles, title: "Ayurvedic Wellness", desc: "Indulge in rejuvenating treatments inspired by ancient wellness traditions in our world-class spa.", img: "/images/amenities/ayurvedic-wellness.jpg" },
+  { Icon: UtensilsCrossed, title: "Fine Dining", desc: "Savor exquisite cuisines prepared by master chefs in our signature restaurants.", img: "/images/amenities/fine-dining.jpg" },
+  { Icon: Waves, title: "Infinity Pool", desc: "Relax in our stunning infinity pool with breathtaking views of the surrounding landscape.", img: "/images/amenities/infinity-pool.jpg" },
+  { Icon: Dumbbell, title: "Fitness Center", desc: "Maintain your wellness routine in our state-of-the-art fitness facility.", img: "/images/amenities/fitness-center.avif" },
+  { Icon: ConciergeBell, title: "Concierge", desc: "Our dedicated staff ensures every need is met with royal attention to detail.", img: "/images/amenities/concierge.avif" },
 ];
+
+function AmenityCard({
+  Icon,
+  title,
+  desc,
+  img,
+  index,
+}: {
+  Icon: ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  img: string;
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShown(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${(index % 3) * 110}ms` }}
+      className={`group flex flex-row overflow-hidden rounded-3xl border border-white/50 bg-surface/55 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_rgba(26,26,26,0.25)] transition-all duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent/50 hover:shadow-[0_22px_55px_-18px_rgba(26,26,26,0.4)] sm:flex-col ${
+        shown ? "translate-y-0 opacity-100 hover:-translate-y-1.5" : "translate-y-8 opacity-0"
+      }`}
+    >
+      <div className="relative w-2/5 shrink-0 overflow-hidden sm:h-44 sm:w-full">
+        <img
+          src={img}
+          alt={title}
+          loading="lazy"
+          className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        <div className="absolute bottom-3 left-3 grid size-10 place-items-center rounded-xl border border-white/30 bg-white/15 text-ivory backdrop-blur-md">
+          <Icon className="size-5" />
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col justify-center p-6 sm:justify-start">
+        <h3 className="font-serif text-xl text-primary mb-2">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+        <Link
+          to="/gallery"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-primary sm:mt-auto sm:pt-4"
+        >
+          View in Gallery
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </div>
+  );
+}
 
 const experiences = [
   { title: "Elite Fitness Center", desc: "Stay energized with modern equipment and a refined workout environment designed for comfort and performance.", img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80" },
@@ -70,32 +139,85 @@ function Home() {
   const cats = ["All", "Appetizer", "Soup", "Main Course", "Dessert", "Drinks"];
   const visible = menuFilter === "All" ? menuPreview : menuPreview.filter((m) => m.cat === menuFilter);
 
+  // Hero title typing animation — runs once on the client, types the whole phrase as one unit.
+  const heroTitle = "Dhanora Dynasty";
+  const goldFrom = 8; // index where "Dynasty" starts ("Dhanora " = 8 chars)
+  const [typed, setTyped] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTyped((n) => {
+        if (n >= heroTitle.length) {
+          clearInterval(id);
+          return n;
+        }
+        return n + 1;
+      });
+    }, 100);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <>
       {/* HERO */}
       <section className="relative min-h-screen w-full overflow-hidden">
-        <img src={HERO} alt="Dhanora Dynasty Resort exterior" className="absolute inset-0 size-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/70 via-primary/55 to-primary-dark/90" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/videos/hero-poster.jpg"
+          className="absolute inset-0 size-full object-cover"
+        >
+          <source src="/videos/hero-mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/70" />
         <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 text-center text-ivory">
-          <p className="eyebrow mb-5 animate-fade-up">Welcome to Anuradhapura</p>
-          <h1 className="font-serif text-6xl md:text-8xl leading-[0.95] animate-fade-up">
-            Dhanora <span className="text-accent">Dynasty</span>
+          <p className="eyebrow mb-5 animate-fade-up !text-[0.6rem] sm:!text-[0.7rem] tracking-[0.2em]">Welcome to Anuradhapura</p>
+          <h1 className="font-serif text-[clamp(2rem,10.5vw,7rem)] leading-[1.05] md:leading-[0.95] min-h-[1.1em] whitespace-nowrap">
+            <span className="sr-only">Dhanora Dynasty</span>
+            <span aria-hidden="true">
+              <span className="inline-block">
+                {"Dhanora".split("").map((ch, i) => (
+                  <span
+                    key={i}
+                    className={`inline-block transition-all duration-500 ease-out ${
+                      i < typed ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-[3px] translate-y-1"
+                    }`}
+                  >
+                    {ch}
+                  </span>
+                ))}
+              </span>{" "}
+              <span className="inline-block text-accent">
+                {"Dynasty".split("").map((ch, i) => (
+                  <span
+                    key={i}
+                    className={`inline-block transition-all duration-500 ease-out ${
+                      goldFrom + i < typed ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-[3px] translate-y-1"
+                    }`}
+                  >
+                    {ch}
+                  </span>
+                ))}
+              </span>
+            </span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg md:text-xl text-ivory/85 animate-fade-up">
+          <p className="mt-5 max-w-2xl text-sm sm:text-base md:text-xl text-ivory/85 animate-fade-up">
             Experience the timeless tranquility of Rajarata ancient kingdom.
           </p>
           <div className="mt-10 flex flex-wrap gap-4 justify-center animate-fade-up">
             <a
-              href="https://wa.me/94769725255"
+              href="https://www.booking.com/hotel/lk/dhanora-dynasty-resort.html"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
             >
-              Inquire Now
+              Book Now
             </a>
             <Link
               to="/rooms"
-              className="rounded-full border border-ivory/40 px-8 py-3.5 font-medium text-ivory hover:bg-ivory/10 transition-colors"
+              className="rounded-full border border-ivory/25 bg-gradient-to-b from-ivory/15 via-primary-dark/35 to-primary-dark/35 px-8 py-3.5 font-medium text-ivory backdrop-blur-xl backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_30px_-10px_rgba(0,0,0,0.45)] transition-all hover:border-ivory/40 hover:from-ivory/25 hover:-translate-y-0.5"
             >
               Explore Rooms
             </Link>
@@ -109,33 +231,31 @@ function Home() {
       {/* INTRO */}
       <section className="py-24 px-6 bg-background">
         <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
-          <div>
+          <div className="text-center lg:text-left">
             <p className="eyebrow mb-3">A Royal Retreat</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-primary mb-6">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-primary mb-5">
               A Sanctuary in the Sacred City
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-lg">
-              Nestled in the heart of the ancient city of Anuradhapura, Dhanora Dynasty Resort invites
-              you to experience a perfect harmony of luxury, tranquility, and cultural charm. Surrounded
-              by the timeless beauty of Sri Lanka's historic kingdom, the resort enjoys an ideal location
-              near the serene Kubichchankulama Lake — just 2 km from the sacred city and its iconic
-              landmarks such as the revered Jaya Sri Maha Bodhi and the majestic Ruwanwelisaya.
+            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg max-w-xl mx-auto lg:mx-0">
+              Nestled in ancient Anuradhapura beside the serene Kubichchankulama Lake, Dhanora Dynasty
+              Resort blends luxury and timeless heritage — just 2 km from the sacred city and its
+              revered landmarks.
             </p>
-            <div className="mt-8 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0">
               {[
                 { v: "2 km", l: "To Sacred City" },
                 { v: "6", l: "Unique Rooms" },
                 { v: "Lakeside", l: "Location" },
               ].map((s) => (
-                <div key={s.l} className="rounded-2xl border border-accent/30 bg-surface p-5 text-center">
-                  <div className="font-serif text-2xl text-primary">{s.v}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.l}</div>
+                <div key={s.l} className="rounded-2xl border border-accent/30 bg-surface px-2 py-4 sm:p-5 text-center">
+                  <div className="font-serif text-lg sm:text-2xl text-primary leading-tight">{s.v}</div>
+                  <div className="text-[0.7rem] sm:text-xs text-muted-foreground mt-1 leading-snug">{s.l}</div>
                 </div>
               ))}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <img src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-72 w-full row-span-2" />
+            <img src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-full w-full row-span-2" />
             <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-44 w-full" />
             <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-44 w-full" />
           </div>
@@ -143,25 +263,18 @@ function Home() {
       </section>
 
       {/* AMENITIES */}
-      <section className="py-24 px-6 bg-surface">
-        <div className="mx-auto max-w-7xl">
+      <section className="relative overflow-hidden py-24 px-6 bg-gradient-to-br from-secondary via-background to-accent-soft/40">
+        <span className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+        <span className="pointer-events-none absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="relative mx-auto max-w-6xl">
           <SectionHeader
             eyebrow="Our Amenities"
             title="Crafted for Royal Comfort"
             description="Every detail considered, every comfort imagined — a stay that lingers in memory."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {amenities.map(({ Icon, title, desc }) => (
-              <div
-                key={title}
-                className="group rounded-2xl border border-border bg-surface p-8 transition-all hover:-translate-y-1 hover:shadow-soft hover:border-accent/40"
-              >
-                <div className="grid size-14 place-items-center rounded-xl bg-primary/5 text-accent mb-5 group-hover:bg-primary group-hover:text-accent transition-colors">
-                  <Icon className="size-7" />
-                </div>
-                <h3 className="font-serif text-2xl text-primary mb-2">{title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            {amenities.map((a, i) => (
+              <AmenityCard key={a.title} {...a} index={i} />
             ))}
           </div>
           <div className="mt-10 flex justify-center">
