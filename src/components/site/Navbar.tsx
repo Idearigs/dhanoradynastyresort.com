@@ -49,16 +49,17 @@ export function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-primary-dark/35 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.45)] py-3"
+          ? "bg-black/60 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.45)] py-3"
           : "bg-gradient-to-b from-black/20 to-transparent backdrop-blur-[2px] py-5"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2 text-ivory">
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-accent text-accent font-serif text-lg">
-            D
-          </span>
-          <span className="font-serif text-xl tracking-wide">Dhanora Dynasty</span>
+        <Link to="/" className="flex items-center text-ivory" aria-label="Dhanora Dynasty Resort — home">
+          <img
+            src="/images/logo.png"
+            alt="Dhanora Dynasty Resort"
+            className={`w-auto transition-all duration-500 ${scrolled ? "h-11 md:h-12" : "h-12 md:h-14"}`}
+          />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -115,25 +116,22 @@ export function Navbar() {
         <span className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-accent/60 to-transparent" />
 
         <div className="relative flex h-full flex-col">
-          <div className="flex items-center justify-between px-7 py-6">
-            <span className="flex items-center gap-2 text-primary">
-              <span className="grid h-9 w-9 place-items-center rounded-full border border-accent text-accent font-serif text-lg">
-                D
-              </span>
-              <span className="font-serif text-lg tracking-wide">Dhanora Dynasty</span>
-            </span>
+          <div className="relative flex items-center justify-between bg-gradient-to-r from-primary-dark to-primary px-7 py-5">
+            <img src="/images/logo.png" alt="Dhanora Dynasty Resort" className="h-12 w-auto" />
             <button
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="grid size-10 place-items-center rounded-full border border-primary/15 bg-primary/5 text-primary transition-colors hover:border-accent hover:text-accent"
+              className="grid size-10 place-items-center rounded-full border border-ivory/20 bg-ivory/5 text-ivory transition-colors hover:border-accent hover:text-accent"
             >
               <X className="size-5" />
             </button>
+            {/* gold hairline */}
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-7 pt-6">
-            <p className="eyebrow mb-5">Navigation</p>
-            <ul className="flex flex-col">
+          <nav className="flex min-h-0 flex-1 flex-col overflow-hidden px-7 pt-5">
+            <p className="eyebrow mb-2 shrink-0">Navigation</p>
+            <ul className="flex flex-1 flex-col justify-evenly">
               {links.map((l, i) => (
                 <li key={l.to} className="border-b border-primary/10">
                   <Link
@@ -142,14 +140,14 @@ export function Navbar() {
                     activeProps={{ className: "!text-accent" }}
                     activeOptions={{ exact: l.to === "/" }}
                     style={open ? { animationDelay: `${120 + i * 70}ms` } : undefined}
-                    className={`group flex items-center gap-4 py-[clamp(0.875rem,2vh,1.4rem)] text-primary transition-colors hover:text-accent ${
+                    className={`group flex items-center gap-4 py-[clamp(0.35rem,1vh,0.7rem)] text-primary transition-colors hover:text-accent ${
                       open ? "animate-menu-item" : "opacity-0"
                     }`}
                   >
                     <span className="font-sans text-xs text-accent/70 tabular-nums">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="flex-1 font-serif text-xl leading-none">{l.label}</span>
+                    <span className="flex-1 font-serif text-lg leading-none">{l.label}</span>
                     <ArrowUpRight className="size-5 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                   </Link>
                 </li>
@@ -157,25 +155,25 @@ export function Navbar() {
             </ul>
           </nav>
 
-          <div className="px-7 pb-8 pt-6">
+          <div className="px-7 pb-[clamp(1.25rem,3vh,2rem)] pt-[clamp(0.75rem,2vh,1.5rem)]">
             <a
               href="https://www.booking.com/hotel/lk/dhanora-dynasty-resort.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center rounded-full bg-accent px-8 py-3.5 text-center font-medium text-primary-dark shadow-[0_10px_30px_-10px_rgba(201,162,39,0.6)] transition-colors hover:bg-accent-soft"
+              className="flex items-center justify-center rounded-full bg-accent px-8 py-3 text-center font-medium text-primary-dark shadow-[0_10px_30px_-10px_rgba(201,162,39,0.6)] transition-colors hover:bg-accent-soft"
             >
               Book Now
             </a>
 
             <a
               href="tel:+94769725255"
-              className="mt-5 flex items-center justify-center gap-2 text-sm text-primary/70 transition-colors hover:text-accent"
+              className="mt-4 flex items-center justify-center gap-2 text-sm text-primary/70 transition-colors hover:text-accent"
             >
               <Phone className="size-4" />
               +94 76 972 5255
             </a>
 
-            <div className="mt-6 flex items-center justify-center gap-3 border-t border-primary/10 pt-6">
+            <div className="mt-4 flex items-center justify-center gap-3 border-t border-primary/10 pt-4">
               {socials.map(({ href, label, Icon }) => (
                 <a
                   key={label}

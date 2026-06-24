@@ -21,9 +21,8 @@ export function Footer() {
     <footer className="bg-primary-dark text-ivory">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-3">
         <div>
-          <div className="flex items-center gap-2 mb-5">
-            <span className="grid h-10 w-10 place-items-center rounded-full border border-accent text-accent font-serif text-lg">D</span>
-            <span className="font-serif text-2xl">Dhanora Dynasty</span>
+          <div className="mb-5">
+            <img src="/images/logo.png" alt="Dhanora Dynasty Resort" className="h-14 w-auto" />
           </div>
           <p className="text-ivory/70 leading-relaxed max-w-sm">
             Experience luxury and royalty like never before in our exquisite resort.

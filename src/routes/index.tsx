@@ -152,7 +152,7 @@ function Home() {
         }
         return n + 1;
       });
-    }, 100);
+    }, 55);
     return () => clearInterval(id);
   }, []);
 
