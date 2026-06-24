@@ -5,10 +5,22 @@ node_modules/
 
 # Builds / output
 dist/
+dist-ssr/
 build/
 .next/
 out/
 *.tsbuildinfo
+
+# TanStack Start / framework artifacts (from Lovable export)
+.output/
+.vinxi/
+.tanstack/**
+.nitro/
+*.local
+
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
 
 # Env & secrets
 .env
