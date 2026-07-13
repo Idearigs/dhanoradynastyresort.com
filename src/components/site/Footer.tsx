@@ -56,6 +56,7 @@ export function Footer() {
               { to: "/menu", label: "Menu" },
               { to: "/gallery", label: "Gallery" },
               { to: "/contact", label: "Contact" },
+              { to: "/credits", label: "Image Credits" },
             ].map((l) => (
               <li key={l.to}>
                 <Link to={l.to} className="hover:text-accent transition-colors">
