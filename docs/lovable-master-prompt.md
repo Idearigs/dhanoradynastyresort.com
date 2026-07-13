@@ -28,15 +28,15 @@ Tagline: "Experience the timeless tranquility of Rajarata ancient kingdom."
 DESIGN SYSTEM
 ────────────────────────────────────────
 Color palette (define as Tailwind theme tokens):
-- Primary (deep emerald):   #0B3D2E
-- Primary-dark:             #07291F
+- Primary (deep oxblood):   #441C1A
+- Primary-dark:             #2E1210
 - Accent (royal gold):      #C9A227   (use for CTAs, underlines, icons, hairline dividers)
 - Accent-soft (champagne):  #E8D8A6
 - Background (ivory):       #F7F2E7
 - Surface (warm white):     #FFFFFF
 - Text (charcoal):          #1A1A1A
 - Muted text:               #5C5C56
-Use emerald + gold as the signature pairing. Gold is an accent only — never flood it.
+Use oxblood + gold as the signature pairing. Gold is an accent only — never flood it.
 
 Typography:
 - Headings: an elegant serif — "Playfair Display" (or Cormorant Garamond). Tight tracking,
@@ -48,7 +48,7 @@ Typography:
 Visual language / components:
 - Generous whitespace, large editorial imagery, 12-col responsive grid.
 - Cards: rounded-2xl, subtle border, soft shadow, gentle hover lift + image zoom.
-- Buttons: primary = gold fill on emerald text or emerald fill; secondary = outline; ghost.
+- Buttons: primary = gold fill on oxblood text or oxblood fill; secondary = outline; ghost.
   Rounded-full or rounded-xl, clear focus rings.
 - Gold hairline dividers; faint mandala/lotus motif as decorative accents (low opacity).
 - Section "eyebrow" label (small gold uppercase) + serif heading + supporting paragraph pattern.
@@ -59,13 +59,13 @@ Visual language / components:
 ────────────────────────────────────────
 GLOBAL LAYOUT
 ────────────────────────────────────────
-Navbar (sticky, transparent over hero → solid emerald/ivory on scroll):
+Navbar (sticky, transparent over hero → solid oxblood/ivory on scroll):
 - Left: logo "Dhanora Dynasty" (serif wordmark + small crown/mandala mark).
 - Center/right links: Home, About Us, Rooms, Menu, Gallery, Contact.
 - Right CTA button "Inquire Now" → https://wa.me/94769725255 (opens new tab).
 - Mobile: hamburger → full-screen elegant slide-in menu.
 
-Footer (deep emerald background, gold accents):
+Footer (deep oxblood background, gold accents):
 - Brand column: "Dhanora Dynasty" + "Experience luxury and royalty like never before in
   our exquisite resort." + social icons: Facebook (https://www.facebook.com/dhanoradynastyresortanuradhapura),
   Instagram (https://www.instagram.com/dhanora_dynasty_resort),
@@ -82,7 +82,7 @@ Routing (React Router): /  /about  /rooms  /menu  /gallery  /contact
 ────────────────────────────────────────
 PAGE 1 — HOME ( / )
 ────────────────────────────────────────
-1. HERO (full viewport): cinematic background image of the resort with dark emerald
+1. HERO (full viewport): cinematic background image of the resort with dark oxblood
    gradient overlay. Eyebrow "WELCOME TO ANURADHAPURA". Big serif headline "DHANORA DYNASTY".
    Subtitle "Experience the timeless tranquility of Rajarata ancient kingdom." Two buttons:
    "Inquire Now" (gold, → WhatsApp) and "Explore Rooms" (outline, → /rooms). Subtle scroll-down cue.
@@ -119,7 +119,7 @@ PAGE 1 — HOME ( / )
    plus "View Full Menu" button → /menu.
 8. NEARBY ATTRACTIONS: heading "Discover the Ancient Kingdom", cards for nearby sites
    (Jaya Sri Maha Bodhi, Ruwanwelisaya, Kubichchankulama Lake, Wilpattu National Park safaris).
-9. CLOSING CTA (full-width emerald band with image): heading "Begin Your Royal Journey",
+9. CLOSING CTA (full-width oxblood band with image): heading "Begin Your Royal Journey",
    copy "Discover the perfect blend of luxury, comfort, and hospitality at Dhanora Dynasty
    Resort. Let us create unforgettable memories for you.", button "Make an Inquiry" → /contact.
 

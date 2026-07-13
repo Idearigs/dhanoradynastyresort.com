@@ -45,7 +45,7 @@ When you open Claude Code in this folder it auto-reads `CLAUDE.md`. Good habits:
 
 ### Example prompts
 
-- *"On feat/fe-foundation: check src/styles.css uses brand tokens emerald #0B3D2E, gold
+- *"On feat/fe-foundation: check src/styles.css uses brand tokens oxblood #441C1A, gold
   #C9A227, ivory #F7F2E7; fix the fonts to a serif heading + sans body. Then make the navbar,
   footer and WhatsApp button use the real links/contact info from content/README.md."*
 - *"Refine the Home page (src/routes/index.tsx) to match docs/lovable-master-prompt.md — hero,
