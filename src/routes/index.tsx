@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
-import { MENU_CATEGORIES, menuByGroup, slug, type MenuCategory } from "../lib/menu";
+import { CATEGORY_IMAGE, MENU_CATEGORIES, menuByGroup, slug, type MenuCategory } from "../lib/menu";
 import {
   Crown,
   Sparkles,
@@ -525,6 +525,18 @@ function Home() {
                 hidden={menuFilter !== cat}
               >
                 <h3 className="sr-only">{cat}</h3>
+                {/* Lazy so the ten hidden panels don't download their banners up front. */}
+                <div className="mb-12 overflow-hidden rounded-3xl">
+                  <img
+                    src={CATEGORY_IMAGE[cat].src}
+                    alt={CATEGORY_IMAGE[cat].alt}
+                    width={1200}
+                    height={520}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-56 w-full object-cover md:h-72"
+                  />
+                </div>
                 {menuByGroup(cat).map((g) => (
                   <div key={g.group ?? cat} className="mb-12 last:mb-0">
                     {g.group && (

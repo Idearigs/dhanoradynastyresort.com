@@ -30,6 +30,58 @@ export const MENU_CATEGORIES = [
 
 export type MenuCategory = (typeof MENU_CATEGORIES)[number];
 
+/**
+ * Banner image per category. Sourced from Unsplash (free for commercial use);
+ * photographer credits in public/images/menu/CREDITS.md.
+ * Alt text is descriptive rather than decorative — these are indexed.
+ */
+export const CATEGORY_IMAGE: Record<MenuCategory, { src: string; alt: string }> = {
+  Breakfast: {
+    src: "/images/menu/breakfast.webp",
+    alt: "A Sri Lankan breakfast plate of rice with tempered vegetables and green chilli",
+  },
+  "Rice & Curry": {
+    src: "/images/menu/rice-curry.webp",
+    alt: "Sri Lankan rice and curry served in clay pots with dhal, green beans and sambol",
+  },
+  "Main Course": {
+    src: "/images/menu/main-course.webp",
+    alt: "Grilled chicken on a wooden board with lemon, rosemary and butter vegetables",
+  },
+  "Snacks & Bites": {
+    src: "/images/menu/snacks-bites.webp",
+    alt: "Batter fried calamari rings served on slate with chilli dipping sauce",
+  },
+  Devilled: {
+    src: "/images/menu/devilled.webp",
+    alt: "Sri Lankan devilled chicken stir fried with green chilli, onion and spring onion",
+  },
+  "Side Dishes": {
+    src: "/images/menu/side-dishes.webp",
+    alt: "Prawn fried rice served in a black bowl",
+  },
+  Pasta: {
+    src: "/images/menu/pasta.webp",
+    alt: "A bowl of spaghetti served in a restaurant setting",
+  },
+  Salad: {
+    src: "/images/menu/salad.webp",
+    alt: "A fresh salad bowl with avocado, tomato, chickpeas and red cabbage",
+  },
+  "Kids Special": {
+    src: "/images/menu/kids-special.webp",
+    alt: "Fish and chips served with tartar sauce",
+  },
+  Dessert: {
+    src: "/images/menu/dessert.webp",
+    alt: "A selection of ice cream served in a coupe glass",
+  },
+  Beverages: {
+    src: "/images/menu/beverages.webp",
+    alt: "Freshly pressed tropical fruit juices being poured into glasses",
+  },
+};
+
 export const MENU: MenuItem[] = [
   // ── Breakfast ──────────────────────────────────────────────────────────────
   { category: "Breakfast", group: "Continental", name: "Herbal Porridge" },
