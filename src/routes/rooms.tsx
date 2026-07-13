@@ -3,7 +3,18 @@ import { useState } from "react";
 import { BedDouble, Eye, X } from "lucide-react";
 import { PageHero } from "../components/site/Section";
 
-const HERO = "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1920&q=80";
+const HERO =
+  "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1920&q=80";
+
+/**
+ * LKR is the authoritative price the resort charges. USD is shown as an approximation
+ * for international guests and is derived from this single rate — update this one line
+ * when the rate moves. Never quote USD as a firm price; the guest pays in LKR.
+ */
+const LKR_PER_USD = 335; // as of 13 July 2026
+
+const lkr = (n: number) => `Rs. ${n.toLocaleString("en-LK")}`;
+const usd = (n: number) => `$${Math.round(n / LKR_PER_USD).toLocaleString("en-US")}`;
 
 type Room = {
   no: string;
@@ -12,23 +23,82 @@ type Room = {
   desc: string;
   beds: string;
   view: string;
+  /** Per night, in LKR. */
+  price: number;
   img: string;
 };
 
 const rooms: Room[] = [
-  { no: "101", tag: "Peaceful Retreat", name: "Twin Bed Room", desc: "Elegantly designed for comfort and relaxation, featuring two cozy single beds with serene backyard garden views.", beds: "2 Single Beds", view: "Garden View", img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80" },
-  { no: "102", tag: "VIP", name: "VIP Family Room", desc: "Ultimate family comfort with a king-size bed, children's room, private terrace dining, and garden views.", beds: "King + Single Bed", view: "Front Garden & Terrace", img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80" },
-  { no: "103", tag: "Luxury", name: "Luxury Single Room", desc: "An elegantly appointed single room with private balcony pool views, shared lounge, and terrace dining access.", beds: "1 Single Bed", view: "Pool & Garden View", img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80" },
-  { no: "104", tag: "Deluxe", name: "Deluxe Double Room", desc: "Spacious deluxe room with queen and single beds, sofa set, and shared terrace dining with garden views.", beds: "Queen + Single Bed", view: "Front Garden", img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" },
-  { no: "105", tag: "Suite", name: "Entertaining Suite Room", desc: "A stunning suite with king bed, private terrace surrounded by a charming flower garden — elegance meets tranquility.", beds: "1 King Bed", view: "Private Flower Garden", img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80" },
-  { no: "106", tag: "Deluxe", name: "Deluxe Family Room", desc: "A spacious family room with private balcony offering rare views of ancient pagodas and a tranquil lake.", beds: "King + Single Bed", view: "Pagoda & Lake View", img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" },
+  {
+    no: "101",
+    tag: "Peaceful Retreat",
+    name: "Twin Bed Room",
+    desc: "Elegantly designed for comfort and relaxation, featuring two cozy single beds with serene backyard garden views.",
+    beds: "2 Single Beds",
+    view: "Garden View",
+    price: 20000,
+    img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    no: "102",
+    tag: "VIP",
+    name: "VIP Family Room",
+    desc: "Ultimate family comfort with a king-size bed, children's room, private terrace dining, and garden views.",
+    beds: "King + Single Bed",
+    view: "Front Garden & Terrace",
+    price: 30000,
+    img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    no: "103",
+    tag: "Luxury",
+    name: "Luxury Single Room",
+    desc: "An elegantly appointed single room with private balcony pool views, shared lounge, and terrace dining access.",
+    beds: "1 Single Bed",
+    view: "Pool & Garden View",
+    price: 18000,
+    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    no: "104",
+    tag: "Deluxe",
+    name: "Deluxe Double Room",
+    desc: "Spacious deluxe room with queen and single beds, sofa set, and shared terrace dining with garden views.",
+    beds: "Queen + Single Bed",
+    view: "Front Garden",
+    price: 20000,
+    img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    no: "105",
+    tag: "Suite",
+    name: "Entertaining Suite Room",
+    desc: "A stunning suite with king bed, private terrace surrounded by a charming flower garden — elegance meets tranquility.",
+    beds: "1 King Bed",
+    view: "Private Flower Garden",
+    price: 25000,
+    img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    no: "106",
+    tag: "Deluxe",
+    name: "Deluxe Family Room",
+    desc: "A spacious family room with private balcony offering rare views of ancient pagodas and a tranquil lake.",
+    beds: "King + Single Bed",
+    view: "Pagoda & Lake View",
+    price: 35000,
+    img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+  },
 ];
 
 export const Route = createFileRoute("/rooms")({
   head: () => ({
     meta: [
       { title: "Rooms — Dhanora Dynasty Resort" },
-      { name: "description", content: "Six uniquely designed rooms blending heritage elegance with modern comfort." },
+      {
+        name: "description",
+        content: "Six uniquely designed rooms blending heritage elegance with modern comfort.",
+      },
       { property: "og:title", content: "Rooms — Dhanora Dynasty Resort" },
       { property: "og:description", content: "Comfort, elegance & heritage in every room." },
       { property: "og:image", content: HERO },
@@ -57,9 +127,16 @@ function Rooms() {
 
         <div className="mx-auto max-w-7xl grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rooms.map((r) => (
-            <article key={r.no} className="group overflow-hidden rounded-2xl bg-surface border border-border hover:shadow-elegant transition-all">
+            <article
+              key={r.no}
+              className="group overflow-hidden rounded-2xl bg-surface border border-border hover:shadow-elegant transition-all"
+            >
               <div className="relative h-64 overflow-hidden">
-                <img src={r.img} alt={r.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img
+                  src={r.img}
+                  alt={r.name}
+                  className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
                 <span className="absolute top-4 left-4 rounded-full bg-primary-dark/85 px-3 py-1 text-xs font-medium text-accent">
                   Room {r.no}
                 </span>
@@ -69,7 +146,16 @@ function Rooms() {
               </div>
               <div className="p-7">
                 <h3 className="font-serif text-2xl text-primary mb-3">{r.name}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm line-clamp-3">{r.desc}</p>
+                <p className="text-muted-foreground leading-relaxed text-sm line-clamp-3">
+                  {r.desc}
+                </p>
+
+                <div className="mt-5 flex items-baseline gap-2 border-t border-border pt-5">
+                  <span className="font-serif text-2xl text-primary">{lkr(r.price)}</span>
+                  <span className="text-sm text-muted-foreground">/ night</span>
+                  <span className="ml-auto text-sm text-muted-foreground">≈ {usd(r.price)}</span>
+                </div>
+
                 <div className="mt-5 flex flex-wrap gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/5 px-3 py-1.5 text-xs text-primary">
                     <BedDouble className="size-3.5 text-accent" /> {r.beds}
@@ -88,6 +174,11 @@ function Rooms() {
             </article>
           ))}
         </div>
+
+        <p className="mx-auto mt-12 max-w-3xl text-center text-sm text-muted-foreground">
+          Rates are per room, per night, in Sri Lankan Rupees. USD amounts are approximate and shown
+          for guidance only, converted at Rs. {LKR_PER_USD} to USD 1.
+        </p>
       </section>
 
       {/* CTA */}
@@ -96,7 +187,9 @@ function Rooms() {
         <div className="relative z-10 mx-auto max-w-3xl text-center text-ivory">
           <p className="eyebrow mb-4">Reserve Your Stay</p>
           <h2 className="font-serif text-4xl md:text-5xl mb-5">Ready to Experience Royalty?</h2>
-          <p className="text-ivory/80 text-lg">Contact us to check availability and reserve your room today.</p>
+          <p className="text-ivory/80 text-lg">
+            Contact us to check availability and reserve your room today.
+          </p>
           <Link
             to="/contact"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
@@ -125,9 +218,20 @@ function Rooms() {
             </button>
             <img src={active.img} alt={active.name} className="w-full h-72 object-cover" />
             <div className="p-8">
-              <p className="eyebrow mb-2">Room {active.no} · {active.tag}</p>
+              <p className="eyebrow mb-2">
+                Room {active.no} · {active.tag}
+              </p>
               <h3 className="font-serif text-3xl text-primary mb-4">{active.name}</h3>
               <p className="text-muted-foreground leading-relaxed text-lg">{active.desc}</p>
+
+              <div className="mt-6 flex items-baseline gap-3 rounded-xl bg-primary/5 px-5 py-4">
+                <span className="font-serif text-3xl text-primary">{lkr(active.price)}</span>
+                <span className="text-sm text-muted-foreground">per night</span>
+                <span className="ml-auto text-sm text-muted-foreground">
+                  ≈ {usd(active.price)} USD
+                </span>
+              </div>
+
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="rounded-xl border border-border p-4">
                   <p className="text-xs text-muted-foreground uppercase tracking-widest">Beds</p>
