@@ -635,7 +635,9 @@ function Home() {
           alt=""
           className="absolute inset-0 size-full object-cover"
         />
-        <div className="absolute inset-0 bg-primary-dark/85" />
+        {/* Gradient scrim rather than a flat wash — keeps the photo readable underneath
+            while holding AA contrast for the ivory copy. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-deep/80 via-charcoal/70 to-charcoal-deep/85" />
         <div className="relative z-10 mx-auto max-w-3xl text-center text-ivory">
           <p className="eyebrow mb-4">Begin Your Journey</p>
           <h2 className="font-serif text-4xl md:text-5xl mb-6">Begin Your Royal Journey</h2>
@@ -646,7 +648,7 @@ function Home() {
           <div className="mt-10">
             <Link
               to="/contact"
-              className="rounded-full bg-accent px-9 py-4 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
+              className="rounded-full bg-accent px-9 py-4 font-medium text-charcoal hover:bg-accent-soft transition-colors"
             >
               Make an Inquiry
             </Link>

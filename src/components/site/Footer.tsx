@@ -10,7 +10,11 @@ function TikTok({ className }: { className?: string }) {
 }
 
 const socials = [
-  { href: "https://www.facebook.com/dhanoradynastyresortanuradhapura", label: "Facebook", Icon: Facebook },
+  {
+    href: "https://www.facebook.com/dhanoradynastyresortanuradhapura",
+    label: "Facebook",
+    Icon: Facebook,
+  },
   { href: "https://www.instagram.com/dhanora_dynasty_resort", label: "Instagram", Icon: Instagram },
   { href: "https://www.tiktok.com/@dhanora_dynasty_resort", label: "TikTok", Icon: TikTok },
   { href: "https://www.youtube.com/@DhanoraDynastyResort", label: "YouTube", Icon: Youtube },
@@ -18,7 +22,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer className="bg-primary-dark text-ivory">
+    <footer className="bg-charcoal text-ivory">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-3">
         <div>
           <div className="mb-5">
@@ -35,7 +39,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="grid size-10 place-items-center rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-primary-dark transition-colors"
+                className="grid size-10 place-items-center rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-charcoal transition-colors"
               >
                 <Icon className="size-4" />
               </a>
@@ -82,7 +86,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-accent/20">
+      <div className="border-t border-accent/20 bg-charcoal-deep">
         <div className="mx-auto max-w-7xl px-6 py-6 text-center text-sm text-ivory/60">
           © 2025 Dhanora Dynasty Resort. All Rights Reserved.
         </div>
