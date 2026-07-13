@@ -19,9 +19,12 @@ import {
   Check,
   ChevronDown,
   ArrowRight,
+  MapPin,
+  X,
 } from "lucide-react";
 import { SectionHeader } from "../components/site/Section";
 import { BookNow } from "../components/site/BookNow";
+import { ATTRACTIONS, type Attraction } from "../lib/attractions";
 
 const HERO =
   "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80";
@@ -173,29 +176,6 @@ const roomsPreview = [
   },
 ];
 
-const attractions = [
-  {
-    name: "Jaya Sri Maha Bodhi",
-    desc: "The sacred Bodhi tree, a revered Buddhist pilgrimage site.",
-    img: "https://images.unsplash.com/photo-1567604130959-7ea7ab2a7f5d?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    name: "Ruwanwelisaya",
-    desc: "A majestic ancient stupa from the Anuradhapura Kingdom.",
-    img: "https://images.unsplash.com/photo-1610552050890-fe99536c2615?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    name: "Kubichchankulama Lake",
-    desc: "Serene lakeside views just steps from the resort.",
-    img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    name: "Wilpattu Safaris",
-    desc: "Wildlife adventures in Sri Lanka's largest national park.",
-    img: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?auto=format&fit=crop&w=1200&q=80",
-  },
-];
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -215,6 +195,20 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [menuFilter, setMenuFilter] = useState<MenuCategory>(MENU_CATEGORIES[0]);
+  const [attraction, setAttraction] = useState<Attraction | null>(null);
+
+  useEffect(() => {
+    if (!attraction) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAttraction(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [attraction]);
 
   // Hero title typing animation — runs once on the client, types the whole phrase as one unit.
   const heroTitle = "Dhanora Dynasty";
@@ -602,22 +596,39 @@ function Home() {
             title="Discover the Ancient Kingdom"
             description="Step beyond the resort and into 2,000 years of Sri Lankan heritage."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {attractions.map((a) => (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {ATTRACTIONS.map((a) => (
               <article
-                key={a.name}
-                className="group overflow-hidden rounded-2xl bg-surface border border-border"
+                key={a.slug}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all hover:border-accent/50 hover:shadow-soft"
               >
                 <div className="relative h-56 overflow-hidden">
                   <img
-                    src={a.img}
-                    alt={a.name}
+                    src={a.image}
+                    alt={a.alt}
+                    width={1000}
+                    height={700}
+                    loading="lazy"
+                    decoding="async"
                     className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
+                  <span className="absolute top-3 left-3 rounded-full bg-charcoal/70 px-3 py-1 text-xs text-ivory backdrop-blur-sm">
+                    {a.meta}
+                  </span>
                 </div>
-                <div className="p-5">
-                  <h3 className="font-serif text-lg text-primary">{a.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="font-serif text-xl text-primary">{a.name}</h3>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {a.tagline}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setAttraction(a)}
+                    className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent transition-colors hover:text-primary"
+                  >
+                    More Details
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  </button>
                 </div>
               </article>
             ))}
@@ -652,6 +663,72 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {attraction && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-charcoal-deep/85 p-4 backdrop-blur-sm"
+          onClick={() => setAttraction(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="attraction-title"
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-surface shadow-elegant"
+          >
+            <button
+              type="button"
+              onClick={() => setAttraction(null)}
+              aria-label="Close"
+              className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full bg-charcoal/70 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+            >
+              <X className="size-5" />
+            </button>
+
+            <img
+              src={attraction.image}
+              alt={attraction.alt}
+              className="h-64 w-full object-cover sm:h-72"
+            />
+
+            <div className="p-8">
+              <p className="eyebrow mb-2">{attraction.meta}</p>
+              <h3 id="attraction-title" className="mb-4 font-serif text-3xl text-primary">
+                {attraction.name}
+              </h3>
+
+              <div className="space-y-4">
+                {attraction.details.map((para, i) => (
+                  <p key={i} className="leading-relaxed text-muted-foreground">
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              <dl className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+                {attraction.facts.map((f) => (
+                  <div key={f.label} className="bg-surface p-4">
+                    <dt className="text-xs tracking-widest text-muted-foreground uppercase">
+                      {f.label}
+                    </dt>
+                    <dd className="mt-1 text-sm font-medium text-primary">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <a
+                href="https://maps.google.com/?q=Anuradhapura+Sacred+City"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-medium text-charcoal transition-colors hover:bg-accent-soft"
+              >
+                <MapPin className="size-4" />
+                View on the map
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
