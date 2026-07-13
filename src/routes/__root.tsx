@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/site/Navbar";
 import { Footer } from "../components/site/Footer";
 import { WhatsAppFloat } from "../components/site/WhatsAppFloat";
+import { ScrollTopButton } from "../components/site/ScrollTopButton";
 
 function NotFoundComponent() {
   return (
@@ -125,6 +126,13 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Navbar />
@@ -133,6 +141,7 @@ function RootComponent() {
       </main>
       <Footer />
       <WhatsAppFloat />
+      <ScrollTopButton />
     </QueryClientProvider>
   );
 }
