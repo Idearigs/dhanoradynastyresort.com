@@ -73,10 +73,22 @@ function Menu() {
 
           {shown.map((cat) => (
             <div key={cat} id={slug(cat)} className="mb-20 last:mb-0">
-              <div className="mb-10 flex items-center gap-4">
-                <span className="hairline" />
-                <h2 className="font-serif text-3xl text-primary">{cat}</h2>
-                <span className="hairline flex-1" />
+              {/* Category banner with the heading over it, matching the home page's menu section. */}
+              <div className="relative mb-10 overflow-hidden rounded-3xl">
+                <img
+                  src={CATEGORY_IMAGE[cat].src}
+                  alt={CATEGORY_IMAGE[cat].alt}
+                  width={1200}
+                  height={520}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-44 w-full object-cover md:h-56"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-deep/85 via-charcoal/45 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex items-center gap-4 p-6 md:p-8">
+                  <span className="hairline" />
+                  <h2 className="font-serif text-3xl text-ivory md:text-4xl">{cat}</h2>
+                </div>
               </div>
 
               {menuByGroup(cat).map((g) => (
