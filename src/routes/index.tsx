@@ -1,7 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
-import { CATEGORY_IMAGE, MENU_CATEGORIES, menuByGroup, slug, type MenuCategory } from "../lib/menu";
+import {
+  CATEGORY_IMAGE,
+  MENU_CATEGORIES,
+  dishImage,
+  menuByGroup,
+  slug,
+  type MenuCategory,
+} from "../lib/menu";
 import {
   Crown,
   Sparkles,
@@ -545,18 +552,31 @@ function Home() {
                         <span className="h-px flex-1 bg-accent/30" />
                       </div>
                     )}
-                    <ul className="grid gap-x-14 gap-y-7 md:grid-cols-2">
+                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                       {g.items.map((m) => (
                         <li
                           key={`${m.category}-${m.name}`}
-                          className="border-b border-border/60 pb-5"
+                          className="group overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-accent/50"
                         >
-                          <h4 className="font-serif text-lg text-primary">{m.name}</h4>
-                          {m.description && (
-                            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                              {m.description}
-                            </p>
-                          )}
+                          <div className="overflow-hidden">
+                            <img
+                              src={dishImage(m) ?? CATEGORY_IMAGE[cat].src}
+                              alt={m.name}
+                              width={400}
+                              height={300}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="p-5">
+                            <h4 className="font-serif text-lg text-primary">{m.name}</h4>
+                            {m.description && (
+                              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                                {m.description}
+                              </p>
+                            )}
+                          </div>
                         </li>
                       ))}
                     </ul>

@@ -340,3 +340,77 @@ export function menuByGroup(category: MenuCategory): { group?: string; items: Me
   }
   return groups;
 }
+
+/**
+ * Dishes that have their own photo in public/images/dishes/<slug>.webp.
+ * The rest fall back to their category banner — better a correct category shot than a
+ * wrong dish shot. Credits: public/images/dishes/CREDITS.md
+ */
+const DISH_IMAGES = new Set([
+  "a-full-english",
+  "avocado-toast",
+  "batter-fried-calamari",
+  "black-pork-curry-with-coconut-roti",
+  "chef-salad",
+  "chicken-alfredo",
+  "chicken-biriyani",
+  "chicken-kottu",
+  "chicken-noodles",
+  "chicken-nuggets-home-made-fries",
+  "coleslaw-salad",
+  "cream-cheese-pasta",
+  "crumbed-fried-chicken",
+  "crumbed-fried-fish",
+  "curd-with-honey",
+  "deep-fried-banana-fritters",
+  "egg-fried-rice",
+  "fish-and-chips",
+  "fish-devilled",
+  "fish-rolls",
+  "french-fries",
+  "fresh-fruit-platter",
+  "fried-beef",
+  "fried-chicken",
+  "fruit-juice",
+  "fruit-plate",
+  "green-salad",
+  "grilled-chicken",
+  "grilled-fish",
+  "herbal-porridge",
+  "lemon-marinated-mixed-seafood-salad",
+  "nutella-roti",
+  "pancake",
+  "pol-roti",
+  "pork-devilled",
+  "pumpkin-soup-platter",
+  "rice-curry-with-four-vegetables",
+  "roasted-cashews",
+  "sausage-devilled",
+  "selection-of-ice-cream",
+  "spaghetti-carbonara",
+  "spicy-chicken-fried-rice",
+  "spicy-chilli-prawn-pasta",
+  "sri-lankan-rice-curry",
+  "steamed-rice",
+  "super-green-omelette",
+  "the-b-b-q",
+  "thosai",
+  "toast-with-butter-jam",
+  "traditional-prawn-curry",
+  "vegetable-fried-rice",
+  "vegetable-noodles",
+  "vegetable-pakora",
+  "vegetable-pasta",
+  "waffles",
+  "watalappam",
+  "white-basmati-rice",
+  "white-rice",
+  "yellow-rice",
+  "yellow-rice-beetroot",
+]);
+
+/** Photo for a dish, or null if it should fall back to the category banner. */
+export function dishImage(item: MenuItem): string | null {
+  const s = slug(item.name);
+  return DISH_IMAGES.has(s) ? `/images/dishes/${s}.webp` : null;
+}
