@@ -3,13 +3,17 @@ import { useState, type FormEvent } from "react";
 import { MapPin, Phone, Mail, Facebook, Instagram, Youtube, Check } from "lucide-react";
 import { PageHero } from "../components/site/Section";
 
-const HERO = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1920&q=80";
+const HERO =
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1920&q=80";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Dhanora Dynasty Resort" },
-      { name: "description", content: "Contact Dhanora Dynasty Resort in Anuradhapura for inquiries and reservations." },
+      {
+        name: "description",
+        content: "Contact Dhanora Dynasty Resort in Anuradhapura for inquiries and reservations.",
+      },
       { property: "og:title", content: "Contact Dhanora Dynasty Resort" },
       { property: "og:description", content: "Get in touch — we'd love to welcome you." },
       { property: "og:image", content: HERO },
@@ -61,7 +65,9 @@ function Contact() {
 
             <form onSubmit={submit} className="space-y-5" noValidate>
               <div>
-                <label htmlFor="name" className="block text-sm text-primary mb-2">Name</label>
+                <label htmlFor="name" className="block text-sm text-primary mb-2">
+                  Name
+                </label>
                 <input
                   id="name"
                   value={form.name}
@@ -73,7 +79,9 @@ function Contact() {
               </div>
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="email" className="block text-sm text-primary mb-2">E-mail</label>
+                  <label htmlFor="email" className="block text-sm text-primary mb-2">
+                    E-mail
+                  </label>
                   <input
                     id="email"
                     type="email"
@@ -82,10 +90,14 @@ function Contact() {
                     className={input}
                     placeholder="you@example.com"
                   />
-                  {errors.email && <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>
+                  )}
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm text-primary mb-2">Contact Number</label>
+                  <label htmlFor="phone" className="block text-sm text-primary mb-2">
+                    Contact Number
+                  </label>
                   <input
                     id="phone"
                     value={form.phone}
@@ -96,7 +108,9 @@ function Contact() {
                 </div>
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm text-primary mb-2">Message</label>
+                <label htmlFor="message" className="block text-sm text-primary mb-2">
+                  Message
+                </label>
                 <textarea
                   id="message"
                   rows={5}
@@ -105,7 +119,9 @@ function Contact() {
                   className={input}
                   placeholder="How can we help?"
                 />
-                {errors.message && <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>}
+                {errors.message && (
+                  <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>
+                )}
               </div>
               <button
                 type="submit"
@@ -155,7 +171,10 @@ function Contact() {
                   </span>
                   <div>
                     <p className="text-xs uppercase tracking-widest text-accent mb-1">Email</p>
-                    <a href="mailto:dhanoradynastyresort@gmail.com" className="text-ivory/85 hover:text-accent">
+                    <a
+                      href="mailto:dhanoradynastyresort@gmail.com"
+                      className="text-ivory/85 hover:text-accent"
+                    >
                       dhanoradynastyresort@gmail.com
                     </a>
                   </div>
@@ -173,10 +192,26 @@ function Contact() {
 
               <div className="mt-8 flex gap-3 pt-8 border-t border-accent/20">
                 {[
-                  { href: "https://www.facebook.com/dhanoradynastyresortanuradhapura", Icon: Facebook, label: "Facebook" },
-                  { href: "https://www.instagram.com/dhanora_dynasty_resort", Icon: Instagram, label: "Instagram" },
-                  { href: "https://www.tiktok.com/@dhanora_dynasty_resort", Icon: TikTok, label: "TikTok" },
-                  { href: "https://www.youtube.com/@DhanoraDynastyResort", Icon: Youtube, label: "YouTube" },
+                  {
+                    href: "https://www.facebook.com/dhanoradynastyresortanuradhapura",
+                    Icon: Facebook,
+                    label: "Facebook",
+                  },
+                  {
+                    href: "https://www.instagram.com/dhanora_dynasty_resort",
+                    Icon: Instagram,
+                    label: "Instagram",
+                  },
+                  {
+                    href: "https://www.tiktok.com/@dhanora_dynasty_resort",
+                    Icon: TikTok,
+                    label: "TikTok",
+                  },
+                  {
+                    href: "https://www.youtube.com/@DhanoraDynastyResort",
+                    Icon: Youtube,
+                    label: "YouTube",
+                  },
                 ].map(({ href, Icon, label }) => (
                   <a
                     key={label}
@@ -195,14 +230,15 @@ function Contact() {
         </div>
       </section>
 
-      {/* Map */}
+      {/* Map — the resort's actual Google Maps place embed */}
       <section className="w-full">
         <iframe
           title="Dhanora Dynasty Resort location"
-          src="https://www.google.com/maps?q=Anuradhapura+Kubichchankulama+Lake&output=embed"
-          className="w-full h-[420px] border-0"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3947.8698148716066!2d80.40362567501067!3d8.315733491719875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afcf5c8314fc9b1%3A0xeb0d347f29cbba9e!2sDhanora%20Dynasty%20Resort!5e0!3m2!1sen!2slk!4v1783939132332!5m2!1sen!2slk"
+          className="block w-full h-[420px] border-0"
+          allowFullScreen
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+          referrerPolicy="strict-origin-when-cross-origin"
         />
       </section>
     </>

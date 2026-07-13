@@ -2,6 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
 import {
+  CATEGORY_IMAGE,
+  MENU_CATEGORIES,
+  dishImage,
+  menuByGroup,
+  slug,
+  type MenuCategory,
+} from "../lib/menu";
+import {
   Crown,
   Sparkles,
   UtensilsCrossed,
@@ -11,18 +19,53 @@ import {
   Check,
   ChevronDown,
   ArrowRight,
+  MapPin,
+  X,
 } from "lucide-react";
 import { SectionHeader } from "../components/site/Section";
+import { BookNow } from "../components/site/BookNow";
+import { ATTRACTIONS, type Attraction } from "../lib/attractions";
 
-const HERO = "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80";
+const HERO =
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80";
 
 const amenities = [
-  { Icon: Crown, title: "Royal Suites", desc: "Experience royal comfort in our elegantly designed suites with panoramic views and premium amenities.", img: "/images/amenities/royal-suites.webp" },
-  { Icon: Sparkles, title: "Ayurvedic Wellness", desc: "Indulge in rejuvenating treatments inspired by ancient wellness traditions in our world-class spa.", img: "/images/amenities/ayurvedic-wellness.jpg" },
-  { Icon: UtensilsCrossed, title: "Fine Dining", desc: "Savor exquisite cuisines prepared by master chefs in our signature restaurants.", img: "/images/amenities/fine-dining.jpg" },
-  { Icon: Waves, title: "Infinity Pool", desc: "Relax in our stunning infinity pool with breathtaking views of the surrounding landscape.", img: "/images/amenities/infinity-pool.jpg" },
-  { Icon: Dumbbell, title: "Fitness Center", desc: "Maintain your wellness routine in our state-of-the-art fitness facility.", img: "/images/amenities/fitness-center.avif" },
-  { Icon: ConciergeBell, title: "Concierge", desc: "Our dedicated staff ensures every need is met with royal attention to detail.", img: "/images/amenities/concierge.avif" },
+  {
+    Icon: Crown,
+    title: "Royal Suites",
+    desc: "Experience royal comfort in our elegantly designed suites with panoramic views and premium amenities.",
+    img: "/images/amenities/royal-suites.webp",
+  },
+  {
+    Icon: Sparkles,
+    title: "Ayurvedic Wellness",
+    desc: "Indulge in rejuvenating treatments inspired by ancient wellness traditions in our world-class spa.",
+    img: "/images/amenities/ayurvedic-wellness.jpg",
+  },
+  {
+    Icon: UtensilsCrossed,
+    title: "Fine Dining",
+    desc: "Savor exquisite cuisines prepared by master chefs in our signature restaurants.",
+    img: "/images/amenities/fine-dining.jpg",
+  },
+  {
+    Icon: Waves,
+    title: "Infinity Pool",
+    desc: "Relax in our stunning infinity pool with breathtaking views of the surrounding landscape.",
+    img: "/images/amenities/infinity-pool.jpg",
+  },
+  {
+    Icon: Dumbbell,
+    title: "Fitness Center",
+    desc: "Maintain your wellness routine in our state-of-the-art fitness facility.",
+    img: "/images/amenities/fitness-center.avif",
+  },
+  {
+    Icon: ConciergeBell,
+    title: "Concierge",
+    desc: "Our dedicated staff ensures every need is met with royal attention to detail.",
+    img: "/images/amenities/concierge.avif",
+  },
 ];
 
 function AmenityCard({
@@ -93,39 +136,55 @@ function AmenityCard({
 }
 
 const experiences = [
-  { title: "Elite Fitness Center", desc: "Stay energized with modern equipment and a refined workout environment designed for comfort and performance.", img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Infinity Pool", desc: "Relax in a stunning infinity pool with scenic surroundings and a calm, luxurious atmosphere.", img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80" },
-  { title: "Smart Kitchen & Dining", desc: "Experience refined cuisine prepared with innovation, quality ingredients, and exceptional service.", img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80" },
+  {
+    title: "Elite Fitness Center",
+    desc: "Stay energized with modern equipment and a refined workout environment designed for comfort and performance.",
+    img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    title: "Infinity Pool",
+    desc: "Relax in a stunning infinity pool with scenic surroundings and a calm, luxurious atmosphere.",
+    img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    title: "Smart Kitchen & Dining",
+    desc: "Experience refined cuisine prepared with innovation, quality ingredients, and exceptional service.",
+    img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+  },
 ];
 
 const roomsPreview = [
-  { name: "VIP Family Room", tag: "Room 102", img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Luxury Single", tag: "Room 103", img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Entertaining Suite", tag: "Room 105", img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Deluxe Family Room", tag: "Room 106", img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80" },
-];
-
-const menuPreview = [
-  { cat: "Appetizer", name: "Spring Rolls", desc: "Crispy golden rolls with fresh vegetables." },
-  { cat: "Soup", name: "French Onion Soup", desc: "Caramelized onions, melted cheese, croutons." },
-  { cat: "Main Course", name: "Grilled Salmon", desc: "Atlantic salmon with lemon butter sauce." },
-  { cat: "Dessert", name: "Chocolate Lava Cake", desc: "Warm chocolate with vanilla ice cream." },
-  { cat: "Drinks", name: "Specialty Coffee", desc: "Cappuccino, Latte, Espresso, or Mocha." },
-  { cat: "Appetizer", name: "Bruschetta", desc: "Toasted bread, tomatoes, basil, olive oil." },
-];
-
-const attractions = [
-  { name: "Jaya Sri Maha Bodhi", desc: "The sacred Bodhi tree, a revered Buddhist pilgrimage site.", img: "https://images.unsplash.com/photo-1567604130959-7ea7ab2a7f5d?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Ruwanwelisaya", desc: "A majestic ancient stupa from the Anuradhapura Kingdom.", img: "https://images.unsplash.com/photo-1610552050890-fe99536c2615?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Kubichchankulama Lake", desc: "Serene lakeside views just steps from the resort.", img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" },
-  { name: "Wilpattu Safaris", desc: "Wildlife adventures in Sri Lanka's largest national park.", img: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?auto=format&fit=crop&w=1200&q=80" },
+  {
+    name: "VIP Family Room",
+    tag: "Room 102",
+    img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    name: "Luxury Single",
+    tag: "Room 103",
+    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    name: "Entertaining Suite",
+    tag: "Room 105",
+    img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    name: "Deluxe Family Room",
+    tag: "Room 106",
+    img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80",
+  },
 ];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Dhanora Dynasty Resort — Luxury Heritage in Anuradhapura" },
-      { name: "description", content: "Experience the timeless tranquility of Rajarata ancient kingdom at Dhanora Dynasty Resort." },
+      {
+        name: "description",
+        content:
+          "Experience the timeless tranquility of Rajarata ancient kingdom at Dhanora Dynasty Resort.",
+      },
       { property: "og:title", content: "Dhanora Dynasty Resort" },
       { property: "og:description", content: "Luxury heritage resort in Anuradhapura, Sri Lanka." },
       { property: "og:image", content: HERO },
@@ -135,9 +194,21 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const [menuFilter, setMenuFilter] = useState<string>("All");
-  const cats = ["All", "Appetizer", "Soup", "Main Course", "Dessert", "Drinks"];
-  const visible = menuFilter === "All" ? menuPreview : menuPreview.filter((m) => m.cat === menuFilter);
+  const [menuFilter, setMenuFilter] = useState<MenuCategory>(MENU_CATEGORIES[0]);
+  const [attraction, setAttraction] = useState<Attraction | null>(null);
+
+  useEffect(() => {
+    if (!attraction) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAttraction(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [attraction]);
 
   // Hero title typing animation — runs once on the client, types the whole phrase as one unit.
   const heroTitle = "Dhanora Dynasty";
@@ -173,7 +244,9 @@ function Home() {
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/70" />
         <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 text-center text-ivory">
-          <p className="eyebrow mb-5 animate-fade-up !text-[0.6rem] sm:!text-[0.7rem] tracking-[0.2em]">Welcome to Anuradhapura</p>
+          <p className="eyebrow mb-5 animate-fade-up !text-[0.6rem] sm:!text-[0.7rem] tracking-[0.2em]">
+            Welcome to Anuradhapura
+          </p>
           <h1 className="font-serif text-[clamp(2rem,10.5vw,7rem)] leading-[1.05] md:leading-[0.95] min-h-[1.1em] whitespace-nowrap">
             <span className="sr-only">Dhanora Dynasty</span>
             <span aria-hidden="true">
@@ -182,7 +255,9 @@ function Home() {
                   <span
                     key={i}
                     className={`inline-block transition-all duration-500 ease-out ${
-                      i < typed ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-[3px] translate-y-1"
+                      i < typed
+                        ? "opacity-100 blur-0 translate-y-0"
+                        : "opacity-0 blur-[3px] translate-y-1"
                     }`}
                   >
                     {ch}
@@ -194,7 +269,9 @@ function Home() {
                   <span
                     key={i}
                     className={`inline-block transition-all duration-500 ease-out ${
-                      goldFrom + i < typed ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-[3px] translate-y-1"
+                      goldFrom + i < typed
+                        ? "opacity-100 blur-0 translate-y-0"
+                        : "opacity-0 blur-[3px] translate-y-1"
                     }`}
                   >
                     {ch}
@@ -207,14 +284,10 @@ function Home() {
             Experience the timeless tranquility of Rajarata ancient kingdom.
           </p>
           <div className="mt-10 flex flex-wrap gap-4 justify-center animate-fade-up">
-            <a
-              href="https://www.booking.com/hotel/lk/dhanora-dynasty-resort.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
-            >
-              Book Now
-            </a>
+            <BookNow
+              align="center"
+              className="rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark transition-colors hover:bg-accent-soft"
+            />
             <Link
               to="/rooms"
               className="rounded-full border border-ivory/25 bg-gradient-to-b from-ivory/15 via-primary-dark/35 to-primary-dark/35 px-8 py-3.5 font-medium text-ivory backdrop-blur-xl backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_30px_-10px_rgba(0,0,0,0.45)] transition-all hover:border-ivory/40 hover:from-ivory/25 hover:-translate-y-0.5"
@@ -237,9 +310,9 @@ function Home() {
               A Sanctuary in the Sacred City
             </h2>
             <p className="text-muted-foreground leading-relaxed text-base sm:text-lg max-w-xl mx-auto lg:mx-0">
-              Nestled in ancient Anuradhapura beside the serene Kubichchankulama Lake, Dhanora Dynasty
-              Resort blends luxury and timeless heritage — just 2 km from the sacred city and its
-              revered landmarks.
+              Nestled in ancient Anuradhapura beside the serene Kubichchankulama Lake, Dhanora
+              Dynasty Resort blends luxury and timeless heritage — just 2 km from the sacred city
+              and its revered landmarks.
             </p>
             <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0">
               {[
@@ -247,17 +320,36 @@ function Home() {
                 { v: "6", l: "Unique Rooms" },
                 { v: "Lakeside", l: "Location" },
               ].map((s) => (
-                <div key={s.l} className="rounded-2xl border border-accent/30 bg-surface px-2 py-4 sm:p-5 text-center">
-                  <div className="font-serif text-lg sm:text-2xl text-primary leading-tight">{s.v}</div>
-                  <div className="text-[0.7rem] sm:text-xs text-muted-foreground mt-1 leading-snug">{s.l}</div>
+                <div
+                  key={s.l}
+                  className="rounded-2xl border border-accent/30 bg-surface px-2 py-4 sm:p-5 text-center"
+                >
+                  <div className="font-serif text-lg sm:text-2xl text-primary leading-tight">
+                    {s.v}
+                  </div>
+                  <div className="text-[0.7rem] sm:text-xs text-muted-foreground mt-1 leading-snug">
+                    {s.l}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <img src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-full w-full row-span-2" />
-            <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-44 w-full" />
-            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80" alt="" className="rounded-2xl object-cover h-44 w-full" />
+            <img
+              src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              className="rounded-2xl object-cover h-full w-full row-span-2"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              className="rounded-2xl object-cover h-44 w-full"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              className="rounded-2xl object-cover h-44 w-full"
+            />
           </div>
         </div>
       </section>
@@ -299,9 +391,10 @@ function Home() {
               A Royal Escape Crafted With Elegance, Comfort, and Timeless Charm
             </h2>
             <p className="mt-6 text-muted-foreground leading-relaxed text-lg">
-              At Dhanora Dynasty, every detail is designed to deliver a refined hospitality experience.
-              From luxurious suites and breathtaking surroundings to personalized service and fine dining,
-              our hotel blends grandeur with warmth to create truly memorable stays.
+              At Dhanora Dynasty, every detail is designed to deliver a refined hospitality
+              experience. From luxurious suites and breathtaking surroundings to personalized
+              service and fine dining, our hotel blends grandeur with warmth to create truly
+              memorable stays.
             </p>
             <ul className="mt-8 grid sm:grid-cols-2 gap-4">
               {[
@@ -328,9 +421,16 @@ function Home() {
           <SectionHeader eyebrow="Our Experiences" title="Signature Luxury Moments" />
           <div className="grid md:grid-cols-3 gap-6">
             {experiences.map((e) => (
-              <article key={e.title} className="group overflow-hidden rounded-2xl border border-border bg-surface">
+              <article
+                key={e.title}
+                className="group overflow-hidden rounded-2xl border border-border bg-surface"
+              >
                 <div className="relative h-72 overflow-hidden">
-                  <img src={e.img} alt={e.title} className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img
+                    src={e.img}
+                    alt={e.title}
+                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
                 </div>
                 <div className="p-7">
                   <h3 className="font-serif text-2xl text-primary mb-3">{e.title}</h3>
@@ -348,22 +448,34 @@ function Home() {
           <SectionHeader eyebrow="Stay With Us" title="Rooms Fit for Royalty" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {roomsPreview.map((r) => (
-              <article key={r.tag} className="group overflow-hidden rounded-2xl bg-surface border border-border">
+              <article
+                key={r.tag}
+                className="group overflow-hidden rounded-2xl bg-surface border border-border"
+              >
                 <div className="relative h-64 overflow-hidden">
-                  <img src={r.img} alt={r.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img
+                    src={r.img}
+                    alt={r.name}
+                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
                   <span className="absolute top-3 left-3 rounded-full bg-primary-dark/80 px-3 py-1 text-xs text-accent">
                     {r.tag}
                   </span>
                 </div>
                 <div className="p-5">
                   <h3 className="font-serif text-xl text-primary">{r.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">Heritage elegance, modern comfort.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Heritage elegance, modern comfort.
+                  </p>
                 </div>
               </article>
             ))}
           </div>
           <div className="mt-12 flex justify-center">
-            <Link to="/rooms" className="rounded-full bg-primary px-8 py-3.5 text-ivory hover:bg-primary-dark transition-colors">
+            <Link
+              to="/rooms"
+              className="rounded-full bg-primary px-8 py-3.5 text-ivory hover:bg-primary-dark transition-colors"
+            >
               View All Rooms
             </Link>
           </div>
@@ -374,10 +486,19 @@ function Home() {
       <section className="py-24 px-6 bg-surface">
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow="From Our Kitchen" title="Savor the Taste of Tradition" />
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {cats.map((c) => (
+
+          <div
+            role="tablist"
+            aria-label="Menu categories"
+            className="flex flex-wrap justify-center gap-2 mb-14"
+          >
+            {MENU_CATEGORIES.map((c) => (
               <button
                 key={c}
+                id={`menu-tab-${slug(c)}`}
+                role="tab"
+                aria-selected={menuFilter === c}
+                aria-controls={`menu-panel-${slug(c)}`}
                 onClick={() => setMenuFilter(c)}
                 className={`rounded-full border px-5 py-2 text-sm transition-colors ${
                   menuFilter === c
@@ -389,17 +510,78 @@ function Home() {
               </button>
             ))}
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visible.map((m) => (
-              <article key={m.name} className="rounded-2xl border border-border bg-surface p-7 hover:border-accent/50 transition-colors">
-                <p className="eyebrow mb-2">{m.cat}</p>
-                <h3 className="font-serif text-xl text-primary mb-2">{m.name}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{m.desc}</p>
-              </article>
+
+          {/* Every category is rendered server-side and inactive ones are hidden, so the whole
+              menu is crawlable — not just the tab that happens to be open. */}
+          <div className="mx-auto max-w-5xl">
+            {MENU_CATEGORIES.map((cat) => (
+              <div
+                key={cat}
+                id={`menu-panel-${slug(cat)}`}
+                role="tabpanel"
+                aria-labelledby={`menu-tab-${slug(cat)}`}
+                hidden={menuFilter !== cat}
+              >
+                <h3 className="sr-only">{cat}</h3>
+                {/* Lazy so the ten hidden panels don't download their banners up front. */}
+                <div className="mb-12 overflow-hidden rounded-3xl">
+                  <img
+                    src={CATEGORY_IMAGE[cat].src}
+                    alt={CATEGORY_IMAGE[cat].alt}
+                    width={1200}
+                    height={520}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-56 w-full object-cover md:h-72"
+                  />
+                </div>
+                {menuByGroup(cat).map((g) => (
+                  <div key={g.group ?? cat} className="mb-12 last:mb-0">
+                    {g.group && (
+                      <div className="mb-7 flex items-center gap-4">
+                        <p className="eyebrow whitespace-nowrap">{g.group}</p>
+                        <span className="h-px flex-1 bg-accent/30" />
+                      </div>
+                    )}
+                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {g.items.map((m) => (
+                        <li
+                          key={`${m.category}-${m.name}`}
+                          className="group overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-accent/50"
+                        >
+                          <div className="overflow-hidden">
+                            <img
+                              src={dishImage(m) ?? CATEGORY_IMAGE[cat].src}
+                              alt={m.name}
+                              width={400}
+                              height={300}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="p-5">
+                            <h4 className="font-serif text-lg text-primary">{m.name}</h4>
+                            {m.description && (
+                              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                                {m.description}
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             ))}
           </div>
-          <div className="mt-12 flex justify-center">
-            <Link to="/menu" className="rounded-full border border-primary px-8 py-3.5 text-primary hover:bg-primary hover:text-ivory transition-colors">
+
+          <div className="mt-14 flex justify-center">
+            <Link
+              to="/menu"
+              className="rounded-full border border-primary px-8 py-3.5 text-primary hover:bg-primary hover:text-ivory transition-colors"
+            >
               View Full Menu
             </Link>
           </div>
@@ -414,15 +596,39 @@ function Home() {
             title="Discover the Ancient Kingdom"
             description="Step beyond the resort and into 2,000 years of Sri Lankan heritage."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {attractions.map((a) => (
-              <article key={a.name} className="group overflow-hidden rounded-2xl bg-surface border border-border">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {ATTRACTIONS.map((a) => (
+              <article
+                key={a.slug}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all hover:border-accent/50 hover:shadow-soft"
+              >
                 <div className="relative h-56 overflow-hidden">
-                  <img src={a.img} alt={a.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img
+                    src={a.image}
+                    alt={a.alt}
+                    width={1000}
+                    height={700}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <span className="absolute top-3 left-3 rounded-full bg-charcoal/70 px-3 py-1 text-xs text-ivory backdrop-blur-sm">
+                    {a.meta}
+                  </span>
                 </div>
-                <div className="p-5">
-                  <h3 className="font-serif text-lg text-primary">{a.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="font-serif text-xl text-primary">{a.name}</h3>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {a.tagline}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setAttraction(a)}
+                    className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent transition-colors hover:text-primary"
+                  >
+                    More Details
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  </button>
                 </div>
               </article>
             ))}
@@ -437,24 +643,92 @@ function Home() {
           alt=""
           className="absolute inset-0 size-full object-cover"
         />
-        <div className="absolute inset-0 bg-primary-dark/85" />
+        {/* Gradient scrim rather than a flat wash — keeps the photo readable underneath
+            while holding AA contrast for the ivory copy. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-deep/80 via-charcoal/70 to-charcoal-deep/85" />
         <div className="relative z-10 mx-auto max-w-3xl text-center text-ivory">
           <p className="eyebrow mb-4">Begin Your Journey</p>
           <h2 className="font-serif text-4xl md:text-5xl mb-6">Begin Your Royal Journey</h2>
           <p className="text-ivory/85 text-lg leading-relaxed">
-            Discover the perfect blend of luxury, comfort, and hospitality at Dhanora Dynasty Resort.
-            Let us create unforgettable memories for you.
+            Discover the perfect blend of luxury, comfort, and hospitality at Dhanora Dynasty
+            Resort. Let us create unforgettable memories for you.
           </p>
           <div className="mt-10">
             <Link
               to="/contact"
-              className="rounded-full bg-accent px-9 py-4 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
+              className="rounded-full bg-accent px-9 py-4 font-medium text-charcoal hover:bg-accent-soft transition-colors"
             >
               Make an Inquiry
             </Link>
           </div>
         </div>
       </section>
+
+      {attraction && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-charcoal-deep/85 p-4 backdrop-blur-sm"
+          onClick={() => setAttraction(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="attraction-title"
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-surface shadow-elegant"
+          >
+            <button
+              type="button"
+              onClick={() => setAttraction(null)}
+              aria-label="Close"
+              className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full bg-charcoal/70 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+            >
+              <X className="size-5" />
+            </button>
+
+            <img
+              src={attraction.image}
+              alt={attraction.alt}
+              className="h-64 w-full object-cover sm:h-72"
+            />
+
+            <div className="p-8">
+              <p className="eyebrow mb-2">{attraction.meta}</p>
+              <h3 id="attraction-title" className="mb-4 font-serif text-3xl text-primary">
+                {attraction.name}
+              </h3>
+
+              <div className="space-y-4">
+                {attraction.details.map((para, i) => (
+                  <p key={i} className="leading-relaxed text-muted-foreground">
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              <dl className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+                {attraction.facts.map((f) => (
+                  <div key={f.label} className="bg-surface p-4">
+                    <dt className="text-xs tracking-widest text-muted-foreground uppercase">
+                      {f.label}
+                    </dt>
+                    <dd className="mt-1 text-sm font-medium text-primary">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <a
+                href="https://maps.google.com/?q=Anuradhapura+Sacred+City"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-medium text-charcoal transition-colors hover:bg-accent-soft"
+              >
+                <MapPin className="size-4" />
+                View on the map
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

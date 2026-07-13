@@ -1,38 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHero } from "../components/site/Section";
+import {
+  CATEGORY_IMAGE,
+  MENU_CATEGORIES,
+  dishImage,
+  menuByGroup,
+  slug,
+  type MenuCategory,
+} from "../lib/menu";
 
-const HERO = "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80";
+const HERO =
+  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1920&q=80";
 
-type Dish = { cat: string; name: string; desc: string };
-
-const dishes: Dish[] = [
-  { cat: "Appetizer", name: "Spring Rolls", desc: "Crispy golden rolls filled with fresh vegetables and aromatic herbs, served with sweet chili sauce." },
-  { cat: "Appetizer", name: "Bruschetta", desc: "Toasted bread topped with fresh tomatoes, garlic, basil, and extra virgin olive oil." },
-  { cat: "Appetizer", name: "Stuffed Mushrooms", desc: "Button mushrooms filled with herbed cheese and breadcrumbs, baked to perfection." },
-  { cat: "Soup", name: "French Onion Soup", desc: "Classic caramelized onion soup topped with melted cheese and toasted croutons." },
-  { cat: "Soup", name: "Cream of Mushroom", desc: "Rich and velvety mushroom soup with hints of thyme and cream." },
-  { cat: "Soup", name: "Tomato Basil Soup", desc: "Fresh tomatoes simmered with basil, garlic, and a touch of cream." },
-  { cat: "Main Course", name: "Grilled Salmon", desc: "Fresh Atlantic salmon grilled to perfection, served with lemon butter sauce and seasonal vegetables." },
-  { cat: "Main Course", name: "Beef Tenderloin", desc: "Premium cut beef cooked to your preference, served with truffle mashed potatoes." },
-  { cat: "Main Course", name: "Chicken Cordon Bleu", desc: "Tender chicken breast stuffed with ham and Swiss cheese, breaded and baked golden." },
-  { cat: "Dessert", name: "Chocolate Lava Cake", desc: "Warm chocolate cake with a molten center, served with vanilla ice cream." },
-  { cat: "Dessert", name: "Tiramisu", desc: "Classic Italian dessert with coffee-soaked ladyfingers and mascarpone cream." },
-  { cat: "Dessert", name: "Crème Brûlée", desc: "Silky vanilla custard with a caramelized sugar crust." },
-  { cat: "Drinks", name: "Fresh Juices", desc: "Orange, Apple, Pineapple, or Mixed Berry." },
-  { cat: "Drinks", name: "Specialty Coffee", desc: "Cappuccino, Latte, Espresso, or Mocha." },
-  { cat: "Drinks", name: "Iced Tea", desc: "Refreshing iced tea with lemon and mint." },
-];
-
-const cats = ["All", "Appetizer", "Soup", "Main Course", "Dessert", "Drinks"] as const;
+/** "All" shows every category stacked; otherwise one category at a time. */
+const FILTERS = ["All", ...MENU_CATEGORIES] as const;
+type Filter = (typeof FILTERS)[number];
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
       { title: "Menu — Dhanora Dynasty Resort" },
-      { name: "description", content: "Savor the taste of tradition — appetizers, soups, mains, desserts, and drinks." },
+      {
+        name: "description",
+        content:
+          "Sri Lankan rice and curry, devilled dishes, kottu, biriyani, fresh seafood and international favourites — served daily at Dhanora Dynasty Resort, Anuradhapura.",
+      },
       { property: "og:title", content: "Menu — Dhanora Dynasty Resort" },
-      { property: "og:description", content: "Refined cuisine prepared by master chefs." },
+      {
+        property: "og:description",
+        content: "A delicious blend of local Sri Lankan flavours and international dishes.",
+      },
       { property: "og:image", content: HERO },
     ],
   }),
@@ -40,26 +38,29 @@ export const Route = createFileRoute("/menu")({
 });
 
 function Menu() {
-  const [filter, setFilter] = useState<(typeof cats)[number]>("All");
-  const visible = filter === "All" ? dishes : dishes.filter((d) => d.cat === filter);
+  const [filter, setFilter] = useState<Filter>("All");
 
-  const grouped = cats
-    .filter((c) => c !== "All")
-    .map((c) => ({ cat: c, items: visible.filter((d) => d.cat === c) }))
-    .filter((g) => g.items.length > 0);
+  const shown: readonly MenuCategory[] =
+    filter === "All" ? MENU_CATEGORIES : [filter as MenuCategory];
 
   return (
     <>
       <PageHero title="Menu" subtitle="Savor the Taste of Tradition" image={HERO} />
 
-      <section className="py-16 px-6 bg-background">
+      <section className="bg-background px-6 py-16">
         <div className="mx-auto max-w-7xl">
-          <div className="sticky top-20 z-20 -mx-2 mb-12 flex flex-wrap justify-center gap-2 rounded-full bg-surface/90 backdrop-blur p-2 shadow-soft border border-border">
-            {cats.map((c) => (
+          <p className="mx-auto mb-12 max-w-3xl text-center text-lg leading-relaxed text-muted-foreground">
+            A delicious blend of local Sri Lankan flavours and international dishes, prepared fresh
+            each day. Speak to us about dietary requirements — most dishes can be adapted.
+          </p>
+
+          <div className="sticky top-20 z-20 -mx-2 mb-14 flex flex-wrap justify-center gap-2 rounded-3xl border border-border bg-surface/90 p-2 shadow-soft backdrop-blur">
+            {FILTERS.map((c) => (
               <button
                 key={c}
                 onClick={() => setFilter(c)}
-                className={`rounded-full px-5 py-2 text-sm transition-colors ${
+                aria-pressed={filter === c}
+                className={`rounded-full px-4 py-2 text-sm transition-colors ${
                   filter === c
                     ? "bg-primary text-ivory"
                     : "text-muted-foreground hover:text-primary"
@@ -70,27 +71,72 @@ function Menu() {
             ))}
           </div>
 
-          {grouped.map(({ cat, items }) => (
-            <div key={cat} className="mb-16">
-              <div className="flex items-center gap-4 mb-8">
-                <span className="hairline" />
-                <h2 className="font-serif text-3xl text-primary">{cat}</h2>
-                <span className="hairline flex-1" />
+          {shown.map((cat) => (
+            <div key={cat} id={slug(cat)} className="mb-20 last:mb-0">
+              {/* Category banner with the heading over it, matching the home page's menu section. */}
+              <div className="relative mb-10 overflow-hidden rounded-3xl">
+                <img
+                  src={CATEGORY_IMAGE[cat].src}
+                  alt={CATEGORY_IMAGE[cat].alt}
+                  width={1200}
+                  height={520}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-44 w-full object-cover md:h-56"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-deep/85 via-charcoal/45 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex items-center gap-4 p-6 md:p-8">
+                  <span className="hairline" />
+                  <h2 className="font-serif text-3xl text-ivory md:text-4xl">{cat}</h2>
+                </div>
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {items.map((d) => (
-                  <article
-                    key={d.name}
-                    className="group rounded-2xl border border-border bg-surface p-7 hover:border-accent/50 hover:shadow-soft transition-all"
-                  >
-                    <p className="eyebrow mb-2">{d.cat}</p>
-                    <h3 className="font-serif text-xl text-primary mb-2">{d.name}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{d.desc}</p>
-                  </article>
-                ))}
-              </div>
+
+              {menuByGroup(cat).map((g) => (
+                <div key={g.group ?? cat} className="mb-12 last:mb-0">
+                  {g.group && (
+                    <div className="mb-7 flex items-center gap-4">
+                      <p className="eyebrow whitespace-nowrap">{g.group}</p>
+                      <span className="h-px flex-1 bg-accent/30" />
+                    </div>
+                  )}
+
+                  <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {g.items.map((m) => (
+                      <li
+                        key={`${m.category}-${m.name}`}
+                        className="group overflow-hidden rounded-2xl border border-border bg-surface transition-all hover:border-accent/50 hover:shadow-soft"
+                      >
+                        <div className="overflow-hidden">
+                          <img
+                            src={dishImage(m) ?? CATEGORY_IMAGE[cat].src}
+                            alt={m.name}
+                            width={400}
+                            height={300}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="p-5">
+                          <h3 className="font-serif text-lg text-primary">{m.name}</h3>
+                          {m.description && (
+                            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                              {m.description}
+                            </p>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           ))}
+
+          <p className="mx-auto mt-16 max-w-3xl text-center text-sm text-muted-foreground">
+            Prices are available on request and at the restaurant. Please ask our team about
+            seasonal items and daily specials.
+          </p>
         </div>
       </section>
     </>
