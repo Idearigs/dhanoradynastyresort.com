@@ -21,7 +21,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { SectionHeader } from "../components/site/Section";
-import { BookingModal } from "../components/site/BookingModal";
+import { BookNow } from "../components/site/BookNow";
 
 const HERO =
   "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1920&q=80";
@@ -215,7 +215,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [menuFilter, setMenuFilter] = useState<MenuCategory>(MENU_CATEGORIES[0]);
-  const [booking, setBooking] = useState(false);
 
   // Hero title typing animation — runs once on the client, types the whole phrase as one unit.
   const heroTitle = "Dhanora Dynasty";
@@ -291,13 +290,10 @@ function Home() {
             Experience the timeless tranquility of Rajarata ancient kingdom.
           </p>
           <div className="mt-10 flex flex-wrap gap-4 justify-center animate-fade-up">
-            <button
-              type="button"
-              onClick={() => setBooking(true)}
-              className="rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark hover:bg-accent-soft transition-colors"
-            >
-              Book Now
-            </button>
+            <BookNow
+              align="center"
+              className="rounded-full bg-accent px-8 py-3.5 font-medium text-primary-dark transition-colors hover:bg-accent-soft"
+            />
             <Link
               to="/rooms"
               className="rounded-full border border-ivory/25 bg-gradient-to-b from-ivory/15 via-primary-dark/35 to-primary-dark/35 px-8 py-3.5 font-medium text-ivory backdrop-blur-xl backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_30px_-10px_rgba(0,0,0,0.45)] transition-all hover:border-ivory/40 hover:from-ivory/25 hover:-translate-y-0.5"
@@ -656,8 +652,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      <BookingModal open={booking} onClose={() => setBooking(false)} />
     </>
   );
 }

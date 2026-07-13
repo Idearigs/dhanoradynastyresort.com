@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone, Facebook, Instagram, Youtube, ArrowUpRight } from "lucide-react";
-import { BookingModal } from "./BookingModal";
+import { BookNow } from "./BookNow";
 
 const links = [
   { to: "/", label: "Home" },
@@ -34,7 +34,6 @@ const socials = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [booking, setBooking] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -87,13 +86,7 @@ export function Navbar() {
           </nav>
 
           <div className="hidden lg:block">
-            <button
-              type="button"
-              onClick={() => setBooking(true)}
-              className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-primary-dark hover:bg-accent-soft transition-colors"
-            >
-              Book Now
-            </button>
+            <BookNow className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-primary-dark transition-colors hover:bg-accent-soft" />
           </div>
 
           <button
@@ -165,16 +158,13 @@ export function Navbar() {
           </nav>
 
           <div className="px-7 pb-[clamp(1.25rem,3vh,2rem)] pt-[clamp(0.75rem,2vh,1.5rem)]">
-            <button
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                setBooking(true);
-              }}
+            {/* Opens upward and fills the drawer width — the button sits at the drawer's
+                bottom edge, and the drawer is overflow-hidden. */}
+            <BookNow
+              up
+              fluid
               className="flex w-full items-center justify-center rounded-full bg-accent px-8 py-3 text-center font-medium text-primary-dark shadow-[0_10px_30px_-10px_rgba(201,162,39,0.6)] transition-colors hover:bg-accent-soft"
-            >
-              Book Now
-            </button>
+            />
 
             <a
               href="tel:+94769725255"
@@ -201,8 +191,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-
-      <BookingModal open={booking} onClose={() => setBooking(false)} />
     </>
   );
 }
