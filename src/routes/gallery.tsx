@@ -3,23 +3,72 @@ import { useEffect, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { PageHero } from "../components/site/Section";
 
-const HERO = "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80";
+const HERO =
+  "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=80";
 
 type Item = { src: string; cat: "Rooms" | "Dining" | "Grounds" | "Wellness"; caption: string };
 
 const items: Item[] = [
-  { src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80", cat: "Rooms", caption: "Twin Bed Room" },
-  { src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80", cat: "Dining", caption: "Fine Dining" },
-  { src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80", cat: "Grounds", caption: "Infinity Pool" },
-  { src: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80", cat: "Wellness", caption: "Ayurvedic Spa" },
-  { src: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80", cat: "Rooms", caption: "VIP Family Room" },
-  { src: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80", cat: "Grounds", caption: "Terrace Garden" },
-  { src: "https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&w=1200&q=80", cat: "Dining", caption: "Signature Plating" },
-  { src: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80", cat: "Wellness", caption: "Fitness Center" },
-  { src: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80", cat: "Rooms", caption: "Entertaining Suite" },
-  { src: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&q=80", cat: "Grounds", caption: "Lakeside View" },
-  { src: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=1200&q=80", cat: "Dining", caption: "Tea Service" },
-  { src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80", cat: "Rooms", caption: "Deluxe Family Room" },
+  {
+    src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
+    cat: "Rooms",
+    caption: "Twin Bed Room",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+    cat: "Dining",
+    caption: "Fine Dining",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+    cat: "Grounds",
+    caption: "Infinity Pool",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80",
+    cat: "Wellness",
+    caption: "Ayurvedic Spa",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80",
+    cat: "Rooms",
+    caption: "VIP Family Room",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80",
+    cat: "Grounds",
+    caption: "Terrace Garden",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&w=1200&q=80",
+    cat: "Dining",
+    caption: "Signature Plating",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80",
+    cat: "Wellness",
+    caption: "Fitness Center",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
+    cat: "Rooms",
+    caption: "Entertaining Suite",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&q=80",
+    cat: "Grounds",
+    caption: "Lakeside View",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=1200&q=80",
+    cat: "Dining",
+    caption: "Tea Service",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    cat: "Rooms",
+    caption: "Deluxe Family Room",
+  },
 ];
 
 const cats = ["All", "Rooms", "Dining", "Grounds", "Wellness"] as const;
@@ -30,9 +79,15 @@ export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
       { title: "Gallery — Dhanora Dynasty Resort" },
-      { name: "description", content: "Moments at Dhanora Dynasty — rooms, dining, grounds, and wellness." },
+      {
+        name: "description",
+        content: "Moments at Dhanora Dynasty — rooms, dining, grounds, and wellness.",
+      },
       { property: "og:title", content: "Gallery — Dhanora Dynasty Resort" },
-      { property: "og:description", content: "Imagery of our luxury heritage retreat in Anuradhapura." },
+      {
+        property: "og:description",
+        content: "Imagery of our luxury heritage retreat in Anuradhapura.",
+      },
       { property: "og:image", content: HERO },
     ],
   }),
@@ -49,8 +104,10 @@ function Gallery() {
     if (lightbox === null) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((i) => (i === null ? null : (i + 1) % visible.length));
-      if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? null : (i - 1 + visible.length) % visible.length));
+      if (e.key === "ArrowRight")
+        setLightbox((i) => (i === null ? null : (i + 1) % visible.length));
+      if (e.key === "ArrowLeft")
+        setLightbox((i) => (i === null ? null : (i - 1 + visible.length) % visible.length));
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -105,13 +162,13 @@ function Gallery() {
 
       {lightbox !== null && (
         <div
-          className="fixed inset-0 z-[60] bg-primary-dark/95 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[60] bg-charcoal-deep/95 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setLightbox(null)}
         >
           <button
             onClick={() => setLightbox(null)}
             aria-label="Close"
-            className="absolute top-6 right-6 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-primary-dark transition-colors"
+            className="absolute top-6 right-6 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-charcoal transition-colors"
           >
             <X className="size-6" />
           </button>
@@ -121,7 +178,7 @@ function Gallery() {
               setLightbox((i) => (i === null ? null : (i - 1 + visible.length) % visible.length));
             }}
             aria-label="Previous"
-            className="absolute left-4 md:left-10 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-primary-dark transition-colors"
+            className="absolute left-4 md:left-10 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-charcoal transition-colors"
           >
             <ChevronLeft className="size-6" />
           </button>
@@ -131,15 +188,21 @@ function Gallery() {
               setLightbox((i) => (i === null ? null : (i + 1) % visible.length));
             }}
             aria-label="Next"
-            className="absolute right-4 md:right-10 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-primary-dark transition-colors"
+            className="absolute right-4 md:right-10 grid size-12 place-items-center rounded-full border border-accent/30 text-ivory hover:bg-accent hover:text-charcoal transition-colors"
           >
             <ChevronRight className="size-6" />
           </button>
           <figure className="max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
-            <img src={visible[lightbox].src} alt={visible[lightbox].caption} className="w-full max-h-[80vh] object-contain rounded-2xl" />
+            <img
+              src={visible[lightbox].src}
+              alt={visible[lightbox].caption}
+              className="w-full max-h-[80vh] object-contain rounded-2xl"
+            />
             <figcaption className="mt-4 text-center text-ivory">
               <p className="font-serif text-lg">{visible[lightbox].caption}</p>
-              <p className="text-sm text-ivory/60 mt-1">{lightbox + 1} / {visible.length}</p>
+              <p className="text-sm text-ivory/60 mt-1">
+                {lightbox + 1} / {visible.length}
+              </p>
             </figcaption>
           </figure>
         </div>

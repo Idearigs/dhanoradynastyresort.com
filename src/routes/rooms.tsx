@@ -281,7 +281,7 @@ function Rooms() {
       {/* Modal */}
       {active && (
         <div
-          className="fixed inset-0 z-[60] bg-primary-dark/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[60] bg-charcoal-deep/85 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setActive(null)}
         >
           <div
@@ -291,7 +291,7 @@ function Rooms() {
             <button
               onClick={() => setActive(null)}
               aria-label="Close"
-              className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full bg-primary-dark/80 text-ivory hover:bg-primary transition-colors"
+              className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full bg-charcoal/70 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
             >
               <X className="size-5" />
             </button>
