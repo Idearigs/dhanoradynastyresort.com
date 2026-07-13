@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone, Facebook, Instagram, Youtube, ArrowUpRight } from "lucide-react";
+import { BookingModal } from "./BookingModal";
 
 const links = [
   { to: "/", label: "Home" },
@@ -20,7 +21,11 @@ function TikTok({ className }: { className?: string }) {
 }
 
 const socials = [
-  { href: "https://www.facebook.com/dhanoradynastyresortanuradhapura", label: "Facebook", Icon: Facebook },
+  {
+    href: "https://www.facebook.com/dhanoradynastyresortanuradhapura",
+    label: "Facebook",
+    Icon: Facebook,
+  },
   { href: "https://www.instagram.com/dhanora_dynasty_resort", label: "Instagram", Icon: Instagram },
   { href: "https://www.tiktok.com/@dhanora_dynasty_resort", label: "TikTok", Icon: TikTok },
   { href: "https://www.youtube.com/@DhanoraDynastyResort", label: "YouTube", Icon: Youtube },
@@ -29,6 +34,7 @@ const socials = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [booking, setBooking] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -46,56 +52,59 @@ export function Navbar() {
 
   return (
     <>
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-black/60 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.45)] py-3"
-          : "bg-gradient-to-b from-black/20 to-transparent backdrop-blur-[2px] py-5"
-      }`}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center text-ivory" aria-label="Dhanora Dynasty Resort — home">
-          <img
-            src="/images/logo.png"
-            alt="Dhanora Dynasty Resort"
-            className={`w-auto transition-all duration-500 ${scrolled ? "h-11 md:h-12" : "h-12 md:h-14"}`}
-          />
-        </Link>
-
-        <nav className="hidden lg:flex items-center gap-8">
-          {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="text-sm text-ivory/90 hover:text-accent transition-colors"
-              activeProps={{ className: "text-accent" }}
-              activeOptions={{ exact: l.to === "/" }}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden lg:block">
-          <a
-            href="https://www.booking.com/hotel/lk/dhanora-dynasty-resort.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-primary-dark hover:bg-accent-soft transition-colors"
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? "bg-black/60 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.45)] py-3"
+            : "bg-gradient-to-b from-black/20 to-transparent backdrop-blur-[2px] py-5"
+        }`}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+          <Link
+            to="/"
+            className="flex items-center text-ivory"
+            aria-label="Dhanora Dynasty Resort — home"
           >
-            Book Now
-          </a>
-        </div>
+            <img
+              src="/images/logo.png"
+              alt="Dhanora Dynasty Resort"
+              className={`w-auto transition-all duration-500 ${scrolled ? "h-11 md:h-12" : "h-12 md:h-14"}`}
+            />
+          </Link>
 
-        <button
-          onClick={() => setOpen(true)}
-          className="lg:hidden text-ivory"
-          aria-label="Open menu"
-        >
-          <Menu className="size-7" />
-        </button>
-      </div>
-    </header>
+          <nav className="hidden lg:flex items-center gap-8">
+            {links.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="text-sm text-ivory/90 hover:text-accent transition-colors"
+                activeProps={{ className: "text-accent" }}
+                activeOptions={{ exact: l.to === "/" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden lg:block">
+            <button
+              type="button"
+              onClick={() => setBooking(true)}
+              className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-primary-dark hover:bg-accent-soft transition-colors"
+            >
+              Book Now
+            </button>
+          </div>
+
+          <button
+            onClick={() => setOpen(true)}
+            className="lg:hidden text-ivory"
+            aria-label="Open menu"
+          >
+            <Menu className="size-7" />
+          </button>
+        </div>
+      </header>
 
       {/* Mobile menu backdrop */}
       <div
@@ -156,14 +165,16 @@ export function Navbar() {
           </nav>
 
           <div className="px-7 pb-[clamp(1.25rem,3vh,2rem)] pt-[clamp(0.75rem,2vh,1.5rem)]">
-            <a
-              href="https://www.booking.com/hotel/lk/dhanora-dynasty-resort.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center rounded-full bg-accent px-8 py-3 text-center font-medium text-primary-dark shadow-[0_10px_30px_-10px_rgba(201,162,39,0.6)] transition-colors hover:bg-accent-soft"
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setBooking(true);
+              }}
+              className="flex w-full items-center justify-center rounded-full bg-accent px-8 py-3 text-center font-medium text-primary-dark shadow-[0_10px_30px_-10px_rgba(201,162,39,0.6)] transition-colors hover:bg-accent-soft"
             >
               Book Now
-            </a>
+            </button>
 
             <a
               href="tel:+94769725255"
@@ -190,6 +201,8 @@ export function Navbar() {
           </div>
         </div>
       </div>
+
+      <BookingModal open={booking} onClose={() => setBooking(false)} />
     </>
   );
 }
