@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { BedDouble, Eye, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { BedDouble, ChevronLeft, ChevronRight, Eye, X } from "lucide-react";
 import { PageHero } from "../components/site/Section";
 
 const HERO =
@@ -25,8 +25,10 @@ type Room = {
   view: string;
   /** Per night, in LKR. */
   price: number;
-  img: string;
 };
+
+/** Four shots per room; [0] is the card thumbnail. Credits: public/images/rooms/CREDITS.md */
+const photos = (no: string) => [1, 2, 3, 4].map((i) => `/images/rooms/${no}-${i}.webp`);
 
 const rooms: Room[] = [
   {
@@ -37,7 +39,6 @@ const rooms: Room[] = [
     beds: "2 Single Beds",
     view: "Garden View",
     price: 20000,
-    img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
   },
   {
     no: "102",
@@ -47,7 +48,6 @@ const rooms: Room[] = [
     beds: "King + Single Bed",
     view: "Front Garden & Terrace",
     price: 30000,
-    img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80",
   },
   {
     no: "103",
@@ -57,7 +57,6 @@ const rooms: Room[] = [
     beds: "1 Single Bed",
     view: "Pool & Garden View",
     price: 18000,
-    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80",
   },
   {
     no: "104",
@@ -67,7 +66,6 @@ const rooms: Room[] = [
     beds: "Queen + Single Bed",
     view: "Front Garden",
     price: 20000,
-    img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
   },
   {
     no: "105",
@@ -77,7 +75,6 @@ const rooms: Room[] = [
     beds: "1 King Bed",
     view: "Private Flower Garden",
     price: 25000,
-    img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
   },
   {
     no: "106",
@@ -87,9 +84,78 @@ const rooms: Room[] = [
     beds: "King + Single Bed",
     view: "Pagoda & Lake View",
     price: 35000,
-    img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
   },
 ];
+
+function RoomCarousel({ room }: { room: Room }) {
+  const shots = photos(room.no);
+  const [i, setI] = useState(0);
+  const go = (step: number) => setI((n) => (n + step + shots.length) % shots.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowRight") go(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shots.length]);
+
+  return (
+    <div className="relative h-72 overflow-hidden bg-charcoal sm:h-80">
+      {shots.map((src, n) => (
+        <img
+          key={src}
+          src={src}
+          alt={`${room.name} — photo ${n + 1} of ${shots.length}`}
+          width={1000}
+          height={700}
+          loading={n === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
+            n === i ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+
+      <button
+        type="button"
+        onClick={() => go(-1)}
+        aria-label="Previous photo"
+        className="absolute top-1/2 left-4 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-accent/30 bg-charcoal/60 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+      >
+        <ChevronLeft className="size-5" />
+      </button>
+      <button
+        type="button"
+        onClick={() => go(1)}
+        aria-label="Next photo"
+        className="absolute top-1/2 right-4 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-accent/30 bg-charcoal/60 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+      >
+        <ChevronRight className="size-5" />
+      </button>
+
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+        {shots.map((src, n) => (
+          <button
+            key={src}
+            type="button"
+            onClick={() => setI(n)}
+            aria-label={`Go to photo ${n + 1}`}
+            aria-current={n === i}
+            className={`h-1.5 rounded-full transition-all ${
+              n === i ? "w-6 bg-accent" : "w-1.5 bg-ivory/60 hover:bg-ivory"
+            }`}
+          />
+        ))}
+      </div>
+
+      <span className="absolute bottom-3 right-4 rounded-full bg-charcoal/70 px-2.5 py-1 text-xs text-ivory/90">
+        {i + 1} / {shots.length}
+      </span>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/rooms")({
   head: () => ({
@@ -109,6 +175,16 @@ export const Route = createFileRoute("/rooms")({
 
 function Rooms() {
   const [active, setActive] = useState<Room | null>(null);
+
+  // The modal had no Escape handling before; the carousel adds arrow keys, so wire up Escape too.
+  useEffect(() => {
+    if (!active) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active]);
 
   return (
     <>
@@ -133,8 +209,11 @@ function Rooms() {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={r.img}
+                  src={photos(r.no)[0]}
                   alt={r.name}
+                  width={1000}
+                  height={700}
+                  loading="lazy"
                   className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <span className="absolute top-4 left-4 rounded-full bg-primary-dark/85 px-3 py-1 text-xs font-medium text-accent">
@@ -216,7 +295,8 @@ function Rooms() {
             >
               <X className="size-5" />
             </button>
-            <img src={active.img} alt={active.name} className="w-full h-72 object-cover" />
+            {/* key resets the carousel to photo 1 when a different room is opened */}
+            <RoomCarousel key={active.no} room={active} />
             <div className="p-8">
               <p className="eyebrow mb-2">
                 Room {active.no} · {active.tag}
