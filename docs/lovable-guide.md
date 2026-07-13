@@ -33,7 +33,7 @@ in the ancient Rajarata kingdom. Mood: royal "dynasty" elegance + Sri Lankan her
 tranquility of Rajarata ancient kingdom."
 
 DESIGN SYSTEM
-- Colors: deep emerald green (primary), royal gold (accent), warm ivory/cream
+- Colors: deep oxblood (primary), royal gold (accent), warm ivory/cream
   (background), charcoal (text). Subtle gold hairline dividers; faint mandala motif accents.
 - Type: elegant serif for headings (Playfair Display or Cormorant Garamond),
   clean sans-serif for body (Inter or Poppins).

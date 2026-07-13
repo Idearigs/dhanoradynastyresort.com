@@ -48,8 +48,9 @@ docs/              PROJECT-PLAN.md, lovable-guide.md, lovable-master-prompt.md
 
 - TypeScript everywhere; prefer typed data. Use shadcn/ui + Tailwind utility classes; don't
   add new UI libraries.
-- Brand tokens: emerald `#0B3D2E`, gold `#C9A227`, ivory `#F7F2E7`, charcoal `#1A1A1A`;
-  serif headings + sans body. Keep gold as an accent only.
+- Brand tokens: oxblood `#441C1A` (primary, dark `#2E1210`), gold `#C9A227`, ivory `#F7F2E7`,
+  charcoal `#1A1A1A`; serif headings + sans body. Keep gold as an accent only.
+  Tokens are defined as oklch in `src/styles.css` — that file is the source of truth.
 - Use **real** content from `content/` (room details, menu, contact info, social links) — no
   lorem ipsum, no placeholder phone/email.
 - Run `bun run build` and `bun run lint` before opening a PR.

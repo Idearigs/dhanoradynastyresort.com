@@ -79,7 +79,7 @@ Work through these on separate `feat/fe-*` branches (one PR each):
 1. **Foundation (`feat/fe-foundation`)**
    - `bun install`, `bun run dev`, click through all 6 pages.
    - Read `README.md`, `docs/PROJECT-PLAN.md`, `docs/lovable-guide.md`, and `content/`.
-   - Confirm brand design tokens (emerald `#0B3D2E`, gold `#C9A227`, ivory `#F7F2E7`,
+   - Confirm brand design tokens (oxblood `#441C1A`, gold `#C9A227`, ivory `#F7F2E7`,
      serif+sans fonts) in `src/styles.css` / Tailwind config; fix to match the brand.
    - Verify navbar, footer, and floating WhatsApp button use the **real** links & contact
      info (see `content/README.md`). Ensure `bun run build` and `bun run lint` pass.
