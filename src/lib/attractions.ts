@@ -173,4 +173,74 @@ export const ATTRACTIONS: Attraction[] = [
       { label: "Climb", value: "1,840 granite steps" },
     ],
   },
+
+  // ── Ancient reservoirs (wewa) ────────────────────────────────────────────────
+  {
+    slug: "tissa-wewa",
+    name: "Tissa Wewa",
+    tagline: "A royal reservoir over 2,200 years old.",
+    meta: "3rd century BCE · ~2 km",
+    image: "/images/attractions/tissa-wewa.webp",
+    alt: "The calm waters of Tissa Wewa reservoir at Anuradhapura",
+    details: [
+      "Tissa Wewa is one of the oldest of Anuradhapura's great irrigation tanks, built by King Devanampiya Tissa in the 3rd century BCE to supply the royal city and its gardens. It is a masterpiece of early hydraulic engineering.",
+      "Fringed by the Tissawewa and royal pleasure gardens, its calm expanse is a favourite spot to watch the sunset, with the domes of the sacred city rising beyond the far shore.",
+    ],
+    facts: [
+      { label: "Built by", value: "King Devanampiya Tissa, 3rd c. BCE" },
+      { label: "Age", value: "~2,300 years" },
+      { label: "Purpose", value: "Supplied the royal city" },
+    ],
+  },
+  {
+    slug: "nuwara-wewa",
+    name: "Nuwara Wewa",
+    tagline: "The largest of Anuradhapura's ancient tanks.",
+    meta: "~2nd century BCE · ~3 km",
+    image: "/images/attractions/nuwara-wewa.webp",
+    alt: "The wide open water of Nuwara Wewa, the largest tank at Anuradhapura",
+    details: [
+      "Nuwara Wewa is the largest of the three great reservoirs of ancient Anuradhapura, covering around 1,200 hectares. Built to store the monsoon rains, it fed the city and its paddy fields through a network of canals.",
+      "Its vast, sea-like horizon makes it a superb place for birdwatching and sunrise walks, and it still irrigates farmland across the district today — a 2,000-year-old system that has never stopped working.",
+    ],
+    facts: [
+      { label: "Era", value: "~2nd century BCE" },
+      { label: "Size", value: "~1,200 hectares" },
+      { label: "Distinction", value: "Largest of the three great tanks" },
+    ],
+  },
+  {
+    slug: "kala-wewa",
+    name: "Kala Wewa",
+    tagline: "A 5th-century engineering marvel fed by a 87 km canal.",
+    meta: "5th century CE · ~40 km",
+    image: "/images/attractions/kala-wewa.webp",
+    alt: "Sunset over the open water of Kala Wewa reservoir",
+    details: [
+      "Kala Wewa was built by King Dhatusena around 460 CE by damming the Kala Oya. The reservoir fed the ancient capital through the Jaya Ganga (Yoda Ela) — a canal running roughly 87 km with a gradient of just centimetres per kilometre, a feat of precision that still astonishes engineers.",
+      "The bund stretches for kilometres, and the nearby colossal Avukana Buddha statue — carved from a single rock face — makes the reservoir a rewarding day trip from the resort.",
+    ],
+    facts: [
+      { label: "Built by", value: "King Dhatusena, c. 460 CE" },
+      { label: "Feeds", value: "The 87 km Jaya Ganga canal" },
+      { label: "Nearby", value: "The Avukana Buddha statue" },
+    ],
+  },
+  {
+    slug: "nachchaduwa-wewa",
+    name: "Nachchaduwa Wewa",
+    tagline: "A vast tank and a haven for birdlife.",
+    meta: "Ancient · ~10 km",
+    image: "/images/attractions/nachchaduwa-wewa.webp",
+    alt: "The stone spillway and open water of Nachchaduwa Wewa reservoir",
+    details: [
+      "Nachchaduwa Wewa is a large ancient reservoir south-east of Anuradhapura, restored and still central to the region's irrigation. Its long bund and stone spillway are a fine example of the island's enduring tank cascade system.",
+      "Quieter than the city tanks, it is rich in birdlife and framed by scrub jungle — a peaceful stop for those who want the landscape and wildlife of the dry zone rather than the crowds.",
+    ],
+    facts: [
+      { label: "Type", value: "Ancient irrigation reservoir" },
+      { label: "Known for", value: "Birdlife and scenery" },
+      { label: "Setting", value: "Dry-zone scrub jungle" },
+    ],
+  },
 ];
