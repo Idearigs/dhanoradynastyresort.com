@@ -45,7 +45,7 @@
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 1.15rem;
 
   /* Brand */
   --background: oklch(0.972 0.018 95); /* ivory #F7F2E7 */
@@ -138,6 +138,61 @@
   background-size: 100% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
+}
+
+/* Frosted-glass surfaces. `glass` for light contexts, `glass-dark` for panels that float
+   over imagery/dark scrims. Both carry a hairline border and an inner top highlight so the
+   edge catches light like real glass. Pair with rounded corners. */
+@utility glass {
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid color-mix(in oklab, white 55%, transparent);
+  box-shadow:
+    0 8px 32px -12px color-mix(in oklab, var(--primary) 30%, transparent),
+    inset 0 1px 0 color-mix(in oklab, white 65%, transparent);
+}
+
+@utility glass-dark {
+  background: color-mix(in oklab, var(--charcoal-deep) 40%, transparent);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in oklab, white 18%, transparent);
+  box-shadow:
+    0 16px 50px -18px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 color-mix(in oklab, white 16%, transparent);
+}
+
+/* Raised, embossed glass card. Frosted translucent fill with a bright top bevel and a soft
+   lower shade for a 3-D lift, over a floated drop shadow. Combine with `rounded-*` and, on
+   interactive cards, hover:-translate-y-* for the tactile press. */
+@utility glass-card {
+  /* Opaque fill — cards sit on solid surfaces, so a backdrop-blur would add nothing visible
+     while making the hover lift stutter as the browser re-rasterises. The glass read comes
+     from the bevel edge and layered shadows instead. */
+  background: var(--surface);
+  /* Glassmorphism edge: a faint tinted hairline that stays visible on light surfaces,
+     lifted by a bright inner bevel so the border reads like the rim of glass. */
+  border: 1px solid color-mix(in oklab, var(--primary) 14%, transparent);
+  box-shadow:
+    0 14px 32px -16px color-mix(in oklab, var(--primary) 30%, transparent),
+    0 3px 8px -4px color-mix(in oklab, var(--primary) 16%, transparent),
+    inset 0 1px 0 color-mix(in oklab, white 80%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, white 35%, transparent),
+    inset 0 -10px 24px -14px color-mix(in oklab, var(--primary) 12%, transparent);
+  will-change: transform;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+@utility glass-card-hover {
+  box-shadow:
+    0 26px 55px -20px color-mix(in oklab, var(--primary) 42%, transparent),
+    0 6px 14px -6px color-mix(in oklab, var(--primary) 22%, transparent),
+    inset 0 1px 0 color-mix(in oklab, white 85%, transparent),
+    inset 0 -10px 24px -14px color-mix(in oklab, var(--primary) 16%, transparent);
 }
 
 @keyframes fade-up {

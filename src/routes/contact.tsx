@@ -59,7 +59,7 @@ function Contact() {
       <section className="py-20 px-6 bg-background">
         <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-12">
           {/* Form */}
-          <div className="rounded-3xl bg-surface border border-border p-8 md:p-10 shadow-soft">
+          <div className="rounded-none bg-surface border border-border p-8 md:p-10 shadow-soft">
             <p className="eyebrow mb-3">Send a Message</p>
             <h2 className="font-serif text-3xl md:text-4xl text-primary mb-8">Make an Inquiry</h2>
 
@@ -131,7 +131,7 @@ function Contact() {
               </button>
               {sent && (
                 <p className="flex items-center gap-2 text-sm text-primary rounded-xl bg-accent/10 border border-accent/40 px-4 py-3">
-                  <Check className="size-4 text-accent" /> Thank you — we'll be in touch shortly.
+                  <Check className="size-4 text-accent" /> Thank you, we'll be in touch shortly.
                 </p>
               )}
             </form>
@@ -139,7 +139,7 @@ function Contact() {
 
           {/* Details */}
           <div className="space-y-6">
-            <div className="rounded-3xl bg-primary text-ivory p-10 shadow-elegant">
+            <div className="rounded-none bg-primary text-ivory p-10 shadow-elegant">
               <p className="eyebrow mb-3">Get in Touch</p>
               <h2 className="font-serif text-3xl mb-8">Our Details</h2>
 

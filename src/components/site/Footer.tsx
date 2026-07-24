@@ -22,7 +22,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer className="bg-charcoal text-ivory">
+    <footer className="bg-primary-dark text-ivory">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-3">
         <div>
           <div className="mb-5">
@@ -39,7 +39,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="grid size-10 place-items-center rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-charcoal transition-colors"
+                className="grid size-10 place-items-center rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-primary-dark transition-colors"
               >
                 <Icon className="size-4" />
               </a>

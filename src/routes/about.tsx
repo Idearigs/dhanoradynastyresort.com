@@ -38,7 +38,7 @@ function About() {
           ].map((c) => (
             <article
               key={c.title}
-              className="rounded-3xl border border-accent/30 bg-surface p-10 shadow-soft"
+              className="rounded-none border border-accent/30 bg-surface p-10 shadow-soft"
             >
               <span className="hairline" />
               <h2 className="mt-4 font-serif text-3xl text-primary">{c.title}</h2>
@@ -55,9 +55,9 @@ function About() {
             <img
               src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80"
               alt="Kelum Senanayaka, Founder & Managing Director"
-              className="rounded-3xl object-cover w-full h-[520px] shadow-elegant"
+              className="rounded-none object-cover w-full h-[520px] shadow-elegant"
             />
-            <div className="absolute -bottom-6 -right-6 hidden md:block rounded-2xl bg-primary text-ivory px-6 py-4 border border-accent/40">
+            <div className="absolute -bottom-6 -right-6 hidden md:block rounded-none bg-primary text-ivory px-6 py-4 border border-accent/40">
               <p className="font-serif text-xl">Kelum Senanayaka</p>
               <p className="text-xs text-accent uppercase tracking-widest">Founder & Managing Director</p>
             </div>
@@ -105,7 +105,7 @@ function About() {
             "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
             "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
           ].map((src, i) => (
-            <img key={i} src={src} alt="" className="rounded-2xl object-cover h-56 w-full" />
+            <img key={i} src={src} alt="" className="rounded-none object-cover h-56 w-full" />
           ))}
         </div>
       </section>

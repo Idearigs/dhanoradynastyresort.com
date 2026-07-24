@@ -20,7 +20,7 @@ const items: Item[] = [
     caption: "Fine Dining",
   },
   {
-    src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+    src: "/images/amenities/infinity-pool.webp",
     cat: "Grounds",
     caption: "Infinity Pool",
   },
@@ -45,7 +45,7 @@ const items: Item[] = [
     caption: "Signature Plating",
   },
   {
-    src: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80",
+    src: "/images/amenities/fitness-center.webp",
     cat: "Wellness",
     caption: "Fitness Center",
   },
@@ -140,7 +140,7 @@ function Gallery() {
               <button
                 key={item.src}
                 onClick={() => setLightbox(i)}
-                className="group mb-5 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-surface relative"
+                className="group mb-5 block w-full break-inside-avoid overflow-hidden rounded-none bg-surface relative"
               >
                 <img
                   src={item.src}
@@ -196,7 +196,7 @@ function Gallery() {
             <img
               src={visible[lightbox].src}
               alt={visible[lightbox].caption}
-              className="w-full max-h-[80vh] object-contain rounded-2xl"
+              className="w-full max-h-[80vh] object-contain rounded-none"
             />
             <figcaption className="mt-4 text-center text-ivory">
               <p className="font-serif text-lg">{visible[lightbox].caption}</p>

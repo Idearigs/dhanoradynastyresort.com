@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Reveal } from "./Reveal";
 
 export function PageHero({
   eyebrow,
@@ -18,9 +19,7 @@ export function PageHero({
       <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-6 text-center text-ivory">
         {eyebrow && <p className="eyebrow mb-4">{eyebrow}</p>}
         <h1 className="font-serif text-5xl md:text-6xl">{title}</h1>
-        {subtitle && (
-          <p className="mt-4 max-w-2xl text-ivory/85 text-lg">{subtitle}</p>
-        )}
+        {subtitle && <p className="mt-4 max-w-2xl text-ivory/85 text-lg">{subtitle}</p>}
         <span className="hairline mt-6" />
       </div>
     </section>
@@ -39,18 +38,20 @@ export function SectionHeader({
   align?: "center" | "left";
 }) {
   return (
-    <div
-      className={`max-w-3xl mb-14 ${
-        align === "center" ? "mx-auto text-center" : ""
-      }`}
-    >
-      {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
-      <h2 className="font-serif text-4xl md:text-5xl text-primary">{title}</h2>
-      {description && (
-        <p className="mt-5 text-muted-foreground leading-relaxed text-lg">
-          {description}
-        </p>
+    <Reveal className={`max-w-3xl mb-16 ${align === "center" ? "mx-auto text-center" : ""}`}>
+      {eyebrow && (
+        <div className={`mb-4 flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}>
+          <span className="h-px w-8 bg-accent/70" />
+          <p className="eyebrow">{eyebrow}</p>
+          <span className={`h-px w-8 bg-accent/70 ${align === "center" ? "" : "hidden"}`} />
+        </div>
       )}
-    </div>
+      <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-primary md:text-6xl">
+        {title}
+      </h2>
+      {description && (
+        <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{description}</p>
+      )}
+    </Reveal>
   );
 }
