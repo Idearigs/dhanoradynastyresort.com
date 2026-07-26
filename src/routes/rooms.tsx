@@ -25,10 +25,13 @@ type Room = {
   view: string;
   /** Per night, in LKR. */
   price: number;
+  /** How many shots this room has on disk. Defaults to 4; [0] is the card thumbnail. */
+  shots?: number;
 };
 
-/** Four shots per room; [0] is the card thumbnail. Credits: public/images/rooms/CREDITS.md */
-const photos = (no: string) => [1, 2, 3, 4].map((i) => `/images/rooms/${no}-${i}.webp`);
+/** Room photos live at public/images/rooms/{no}-{n}.webp. Credits: CREDITS.md */
+const photos = (no: string, shots = 4) =>
+  Array.from({ length: shots }, (_, i) => `/images/rooms/${no}-${i + 1}.webp`);
 
 const rooms: Room[] = [
   {
@@ -39,6 +42,7 @@ const rooms: Room[] = [
     beds: "2 Single Beds",
     view: "Garden View",
     price: 20000,
+    shots: 3,
   },
   {
     no: "102",
@@ -48,6 +52,7 @@ const rooms: Room[] = [
     beds: "King + Single Bed",
     view: "Front Garden & Terrace",
     price: 30000,
+    shots: 10,
   },
   {
     no: "103",
@@ -57,6 +62,7 @@ const rooms: Room[] = [
     beds: "1 Single Bed",
     view: "Pool & Garden View",
     price: 18000,
+    shots: 3,
   },
   {
     no: "104",
@@ -71,7 +77,7 @@ const rooms: Room[] = [
     no: "105",
     tag: "Suite",
     name: "Entertaining Suite Room",
-    desc: "A stunning suite with king bed, private terrace surrounded by a charming flower garden — elegance meets tranquility.",
+    desc: "A stunning suite with king bed, private terrace surrounded by a charming flower garden, elegance meets tranquility.",
     beds: "1 King Bed",
     view: "Private Flower Garden",
     price: 25000,
@@ -88,7 +94,7 @@ const rooms: Room[] = [
 ];
 
 function RoomCarousel({ room }: { room: Room }) {
-  const shots = photos(room.no);
+  const shots = photos(room.no, room.shots);
   const [i, setI] = useState(0);
   const go = (step: number) => setI((n) => (n + step + shots.length) % shots.length);
 
@@ -103,12 +109,12 @@ function RoomCarousel({ room }: { room: Room }) {
   }, [shots.length]);
 
   return (
-    <div className="relative h-72 overflow-hidden bg-charcoal sm:h-80">
+    <div className="relative h-56 overflow-hidden bg-charcoal sm:h-72 md:h-full md:min-h-[30rem]">
       {shots.map((src, n) => (
         <img
           key={src}
           src={src}
-          alt={`${room.name} — photo ${n + 1} of ${shots.length}`}
+          alt={`${room.name}, photo ${n + 1} of ${shots.length}`}
           width={1000}
           height={700}
           loading={n === 0 ? "eager" : "lazy"}
@@ -197,7 +203,7 @@ function Rooms() {
 
       <section className="py-20 px-6 bg-background">
         <p className="mx-auto max-w-3xl text-center text-muted-foreground leading-relaxed text-lg mb-16">
-          Each of our six uniquely designed rooms blends heritage elegance with modern comfort —
+          Each of our six uniquely designed rooms blends heritage elegance with modern comfort,
           crafted to offer you a truly memorable stay at Dhanora Dynasty.
         </p>
 
@@ -205,9 +211,9 @@ function Rooms() {
           {rooms.map((r) => (
             <article
               key={r.no}
-              className="group overflow-hidden rounded-2xl bg-surface border border-border hover:shadow-elegant transition-all"
+              className="group glass-card overflow-hidden rounded-none hover:-translate-y-1 hover:glass-card-hover"
             >
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-72 overflow-hidden bg-charcoal">
                 <img
                   src={photos(r.no)[0]}
                   alt={r.name}
@@ -216,26 +222,32 @@ function Rooms() {
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <span className="absolute top-4 left-4 rounded-full bg-primary-dark/85 px-3 py-1 text-xs font-medium text-accent">
-                  Room {r.no}
-                </span>
-                <span className="absolute top-4 right-4 rounded-full bg-accent px-3 py-1 text-xs font-medium text-primary-dark">
-                  {r.tag}
-                </span>
+                {/* One solid bar across the top: room number on the left, tag on the right. */}
+                <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-3 border-b border-accent/40 bg-primary-dark/95 px-4 py-2.5">
+                  <span className="flex items-baseline gap-1.5 text-accent">
+                    <span className="text-[0.65rem] font-medium tracking-[0.18em] uppercase opacity-80">
+                      Room
+                    </span>
+                    <span className="font-serif text-xl leading-none tabular-nums">{r.no}</span>
+                  </span>
+                  <span className="text-[0.7rem] font-medium tracking-[0.12em] text-ivory uppercase">
+                    {r.tag}
+                  </span>
+                </div>
               </div>
-              <div className="p-7">
-                <h3 className="font-serif text-2xl text-primary mb-3">{r.name}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm line-clamp-3">
+              <div className="p-5">
+                <h3 className="font-serif text-lg text-primary mb-1.5">{r.name}</h3>
+                <p className="text-muted-foreground leading-relaxed text-sm line-clamp-2">
                   {r.desc}
                 </p>
 
-                <div className="mt-5 flex items-baseline gap-2 border-t border-border pt-5">
-                  <span className="font-serif text-2xl text-primary">{lkr(r.price)}</span>
+                <div className="mt-3 flex items-baseline gap-2 border-t border-border pt-3">
+                  <span className="font-serif text-lg text-primary tabular-nums">{lkr(r.price)}</span>
                   <span className="text-sm text-muted-foreground">/ night</span>
-                  <span className="ml-auto text-sm text-muted-foreground">≈ {usd(r.price)}</span>
+                  <span className="ml-auto font-serif text-lg text-primary tabular-nums">≈ {usd(r.price)}</span>
                 </div>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/5 px-3 py-1.5 text-xs text-primary">
                     <BedDouble className="size-3.5 text-accent" /> {r.beds}
                   </span>
@@ -245,7 +257,7 @@ function Rooms() {
                 </div>
                 <button
                   onClick={() => setActive(r)}
-                  className="mt-6 w-full rounded-full border border-primary px-5 py-2.5 text-sm text-primary hover:bg-primary hover:text-ivory transition-colors"
+                  className="mt-4 w-full rounded-full border border-primary px-5 py-2 text-sm text-primary hover:bg-primary hover:text-ivory transition-colors"
                 >
                   View Details
                 </button>
@@ -253,16 +265,18 @@ function Rooms() {
             </article>
           ))}
         </div>
-
-        <p className="mx-auto mt-12 max-w-3xl text-center text-sm text-muted-foreground">
-          Rates are per room, per night, in Sri Lankan Rupees. USD amounts are approximate and shown
-          for guidance only, converted at Rs. {LKR_PER_USD} to USD 1.
-        </p>
       </section>
 
       {/* CTA */}
       <section className="relative overflow-hidden py-24 px-6">
-        <div className="absolute inset-0 bg-primary-dark" />
+        <img
+          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80"
+          alt=""
+          className="absolute inset-0 size-full object-cover"
+        />
+        {/* Gradient scrim rather than a flat wash — keeps the photo readable underneath
+            while holding AA contrast for the ivory copy. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-deep/80 via-charcoal/70 to-charcoal-deep/85" />
         <div className="relative z-10 mx-auto max-w-3xl text-center text-ivory">
           <p className="eyebrow mb-4">Reserve Your Stay</p>
           <h2 className="font-serif text-4xl md:text-5xl mb-5">Ready to Experience Royalty?</h2>
@@ -285,7 +299,7 @@ function Rooms() {
           onClick={() => setActive(null)}
         >
           <div
-            className="relative max-w-2xl w-full bg-surface rounded-3xl overflow-hidden max-h-[90vh] overflow-y-auto"
+            className="relative max-w-4xl w-full bg-surface rounded-none overflow-hidden max-h-[90vh] flex flex-col md:flex-row"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -296,19 +310,23 @@ function Rooms() {
               <X className="size-5" />
             </button>
             {/* key resets the carousel to photo 1 when a different room is opened */}
-            <RoomCarousel key={active.no} room={active} />
-            <div className="p-8">
+            <div className="shrink-0 md:w-1/2">
+              <RoomCarousel key={active.no} room={active} />
+            </div>
+            <div className="overflow-y-auto p-8 md:w-1/2">
               <p className="eyebrow mb-2">
-                Room {active.no} · {active.tag}
+                Room {active.no}, {active.tag}
               </p>
               <h3 className="font-serif text-3xl text-primary mb-4">{active.name}</h3>
               <p className="text-muted-foreground leading-relaxed text-lg">{active.desc}</p>
 
               <div className="mt-6 flex items-baseline gap-3 rounded-xl bg-primary/5 px-5 py-4">
-                <span className="font-serif text-3xl text-primary">{lkr(active.price)}</span>
+                <span className="font-serif text-3xl text-primary tabular-nums">
+                  {lkr(active.price)}
+                </span>
                 <span className="text-sm text-muted-foreground">per night</span>
-                <span className="ml-auto text-sm text-muted-foreground">
-                  ≈ {usd(active.price)} USD
+                <span className="ml-auto font-serif text-3xl text-primary tabular-nums">
+                  ≈ {usd(active.price)}
                 </span>
               </div>
 

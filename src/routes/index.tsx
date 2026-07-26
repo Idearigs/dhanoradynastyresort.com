@@ -18,11 +18,14 @@ import {
   ConciergeBell,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ArrowRight,
   MapPin,
   X,
 } from "lucide-react";
 import { SectionHeader } from "../components/site/Section";
+import { Reveal } from "../components/site/Reveal";
 import { BookNow } from "../components/site/BookNow";
 import { ATTRACTIONS, type Attraction } from "../lib/attractions";
 
@@ -34,7 +37,7 @@ const amenities = [
     Icon: Crown,
     title: "Royal Suites",
     desc: "Experience royal comfort in our elegantly designed suites with panoramic views and premium amenities.",
-    img: "/images/amenities/royal-suites.webp",
+    img: "/images/rooms/102-1.webp",
   },
   {
     Icon: Sparkles,
@@ -52,13 +55,13 @@ const amenities = [
     Icon: Waves,
     title: "Infinity Pool",
     desc: "Relax in our stunning infinity pool with breathtaking views of the surrounding landscape.",
-    img: "/images/amenities/infinity-pool.jpg",
+    img: "/images/amenities/infinity-pool.webp",
   },
   {
     Icon: Dumbbell,
     title: "Fitness Center",
     desc: "Maintain your wellness routine in our state-of-the-art fitness facility.",
-    img: "/images/amenities/fitness-center.avif",
+    img: "/images/amenities/fitness-center.webp",
   },
   {
     Icon: ConciergeBell,
@@ -67,6 +70,82 @@ const amenities = [
     img: "/images/amenities/concierge.avif",
   },
 ];
+
+/** Carousel for the attraction dialog. Shows arrows/dots only when there is more than one image. */
+function AttractionGallery({ attraction }: { attraction: Attraction }) {
+  const images = [attraction.image, ...(attraction.gallery ?? [])];
+  const [i, setI] = useState(0);
+  const go = (step: number) => setI((n) => (n + step + images.length) % images.length);
+
+  useEffect(() => {
+    if (images.length < 2) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowRight") go(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images.length]);
+
+  return (
+    <div className="relative h-56 overflow-hidden bg-charcoal sm:h-64 md:h-full md:min-h-[24rem]">
+      {images.map((src, n) => (
+        <img
+          key={src}
+          src={src}
+          alt={`${attraction.name}, photo ${n + 1} of ${images.length}`}
+          width={1000}
+          height={700}
+          loading={n === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
+            n === i ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+
+      {images.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous photo"
+            className="absolute top-1/2 left-4 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-accent/30 bg-charcoal/60 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+          >
+            <ChevronLeft className="size-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next photo"
+            className="absolute top-1/2 right-4 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-accent/30 bg-charcoal/60 text-ivory backdrop-blur-sm transition-colors hover:bg-accent hover:text-charcoal"
+          >
+            <ChevronRight className="size-5" />
+          </button>
+
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+            {images.map((src, n) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setI(n)}
+                aria-label={`Go to photo ${n + 1}`}
+                aria-current={n === i}
+                className={`h-1.5 rounded-full transition-all ${
+                  n === i ? "w-6 bg-accent" : "w-1.5 bg-ivory/60 hover:bg-ivory"
+                }`}
+              />
+            ))}
+          </div>
+
+          <span className="absolute bottom-3 right-4 rounded-full bg-charcoal/70 px-2.5 py-1 text-xs text-ivory/90">
+            {i + 1} / {images.length}
+          </span>
+        </>
+      )}
+    </div>
+  );
+}
 
 function AmenityCard({
   Icon,
@@ -104,7 +183,7 @@ function AmenityCard({
     <div
       ref={ref}
       style={{ transitionDelay: `${(index % 3) * 110}ms` }}
-      className={`group flex flex-row overflow-hidden rounded-3xl border border-white/50 bg-surface/55 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_rgba(26,26,26,0.25)] transition-all duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent/50 hover:shadow-[0_22px_55px_-18px_rgba(26,26,26,0.4)] sm:flex-col ${
+      className={`group flex flex-row overflow-hidden rounded-none border border-white/50 bg-surface/55 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_rgba(26,26,26,0.25)] transition-all duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent/50 hover:shadow-[0_22px_55px_-18px_rgba(26,26,26,0.4)] sm:flex-col ${
         shown ? "translate-y-0 opacity-100 hover:-translate-y-1.5" : "translate-y-8 opacity-0"
       }`}
     >
@@ -139,12 +218,12 @@ const experiences = [
   {
     title: "Elite Fitness Center",
     desc: "Stay energized with modern equipment and a refined workout environment designed for comfort and performance.",
-    img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/amenities/fitness-center.webp",
   },
   {
     title: "Infinity Pool",
     desc: "Relax in a stunning infinity pool with scenic surroundings and a calm, luxurious atmosphere.",
-    img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/amenities/infinity-pool.webp",
   },
   {
     title: "Smart Kitchen & Dining",
@@ -157,22 +236,22 @@ const roomsPreview = [
   {
     name: "VIP Family Room",
     tag: "Room 102",
-    img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/rooms/102-1.webp",
   },
   {
     name: "Luxury Single",
     tag: "Room 103",
-    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/rooms/103-1.webp",
   },
   {
     name: "Entertaining Suite",
     tag: "Room 105",
-    img: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/rooms/105-1.webp",
   },
   {
     name: "Deluxe Family Room",
     tag: "Room 106",
-    img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/rooms/106-1.webp",
   },
 ];
 
@@ -311,7 +390,7 @@ function Home() {
             </h2>
             <p className="text-muted-foreground leading-relaxed text-base sm:text-lg max-w-xl mx-auto lg:mx-0">
               Nestled in ancient Anuradhapura beside the serene Kubichchankulama Lake, Dhanora
-              Dynasty Resort blends luxury and timeless heritage — just 2 km from the sacred city
+              Dynasty Resort blends luxury and timeless heritage, just 2 km from the sacred city
               and its revered landmarks.
             </p>
             <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0">
@@ -322,7 +401,7 @@ function Home() {
               ].map((s) => (
                 <div
                   key={s.l}
-                  className="rounded-2xl border border-accent/30 bg-surface px-2 py-4 sm:p-5 text-center"
+                  className="rounded-none border border-accent/30 bg-surface px-2 py-4 sm:p-5 text-center"
                 >
                   <div className="font-serif text-lg sm:text-2xl text-primary leading-tight">
                     {s.v}
@@ -338,31 +417,29 @@ function Home() {
             <img
               src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80"
               alt=""
-              className="rounded-2xl object-cover h-full w-full row-span-2"
+              className="rounded-none object-cover h-full w-full row-span-2"
             />
             <img
               src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80"
               alt=""
-              className="rounded-2xl object-cover h-44 w-full"
+              className="rounded-none object-cover h-44 w-full"
             />
             <img
               src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80"
               alt=""
-              className="rounded-2xl object-cover h-44 w-full"
+              className="rounded-none object-cover h-44 w-full"
             />
           </div>
         </div>
       </section>
 
       {/* AMENITIES */}
-      <section className="relative overflow-hidden py-24 px-6 bg-gradient-to-br from-secondary via-background to-accent-soft/40">
-        <span className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
-        <span className="pointer-events-none absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-surface py-24 px-6">
         <div className="relative mx-auto max-w-6xl">
           <SectionHeader
             eyebrow="Our Amenities"
             title="Crafted for Royal Comfort"
-            description="Every detail considered, every comfort imagined — a stay that lingers in memory."
+            description="Every detail considered, every comfort imagined, a stay that lingers in memory."
           />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {amenities.map((a, i) => (
@@ -381,9 +458,9 @@ function Home() {
       <section className="py-24 px-6 bg-background">
         <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
           <img
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80"
-            alt=""
-            className="rounded-3xl object-cover h-[520px] w-full shadow-soft"
+            src="/images/home/welcome.webp"
+            alt="Entertaining Suite interior at Dhanora Dynasty Resort"
+            className="rounded-none object-cover h-[520px] w-full shadow-soft"
           />
           <div>
             <p className="eyebrow mb-3">Welcome to Dhanora Dynasty</p>
@@ -420,23 +497,22 @@ function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow="Our Experiences" title="Signature Luxury Moments" />
           <div className="grid md:grid-cols-3 gap-6">
-            {experiences.map((e) => (
-              <article
-                key={e.title}
-                className="group overflow-hidden rounded-2xl border border-border bg-surface"
-              >
-                <div className="relative h-72 overflow-hidden">
-                  <img
-                    src={e.img}
-                    alt={e.title}
-                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </div>
-                <div className="p-7">
-                  <h3 className="font-serif text-2xl text-primary mb-3">{e.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{e.desc}</p>
-                </div>
-              </article>
+            {experiences.map((e, i) => (
+              <Reveal key={e.title} delay={i * 90} className="h-full">
+                <article className="group glass-card flex h-full flex-col overflow-hidden rounded-none hover:-translate-y-1 hover:glass-card-hover">
+                  <div className="aspect-[3/2] overflow-hidden">
+                    <img
+                      src={e.img}
+                      alt={e.title}
+                      className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="mb-2 font-serif text-xl text-primary">{e.title}</h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{e.desc}</p>
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -447,28 +523,33 @@ function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeader eyebrow="Stay With Us" title="Rooms Fit for Royalty" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {roomsPreview.map((r) => (
-              <article
-                key={r.tag}
-                className="group overflow-hidden rounded-2xl bg-surface border border-border"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={r.img}
-                    alt={r.name}
-                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <span className="absolute top-3 left-3 rounded-full bg-primary-dark/80 px-3 py-1 text-xs text-accent">
-                    {r.tag}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-serif text-xl text-primary">{r.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Heritage elegance, modern comfort.
-                  </p>
-                </div>
-              </article>
+            {roomsPreview.map((r, i) => (
+              <Reveal key={r.tag} delay={i * 90}>
+                <article className="group glass-card overflow-hidden rounded-none hover:-translate-y-1 hover:glass-card-hover">
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={r.img}
+                      alt={r.name}
+                      className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* Same solid bar as the rooms page, so the number reads clearly. */}
+                    <div className="absolute inset-x-0 top-0 flex items-baseline gap-1.5 border-b border-accent/40 bg-primary-dark/95 px-4 py-2.5 text-accent">
+                      <span className="text-[0.65rem] font-medium tracking-[0.18em] uppercase opacity-80">
+                        Room
+                      </span>
+                      <span className="font-serif text-xl leading-none tabular-nums">
+                        {r.tag.replace(/^Room\s*/, "")}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-serif text-xl text-primary">{r.name}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Heritage elegance, modern comfort.
+                    </p>
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
           <div className="mt-12 flex justify-center">
@@ -524,7 +605,7 @@ function Home() {
               >
                 <h3 className="sr-only">{cat}</h3>
                 {/* Lazy so the ten hidden panels don't download their banners up front. */}
-                <div className="mb-12 overflow-hidden rounded-3xl">
+                <div className="mb-12 overflow-hidden rounded-none">
                   <img
                     src={CATEGORY_IMAGE[cat].src}
                     alt={CATEGORY_IMAGE[cat].alt}
@@ -535,6 +616,7 @@ function Home() {
                     className="h-56 w-full object-cover md:h-72"
                   />
                 </div>
+                {/* Home is a teaser — first three dishes per sub-group; the full menu lives on /menu. */}
                 {menuByGroup(cat).map((g) => (
                   <div key={g.group ?? cat} className="mb-12 last:mb-0">
                     {g.group && (
@@ -544,10 +626,10 @@ function Home() {
                       </div>
                     )}
                     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {g.items.map((m) => (
+                      {g.items.slice(0, 3).map((m) => (
                         <li
                           key={`${m.category}-${m.name}`}
-                          className="group overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-accent/50"
+                          className="group glass-card overflow-hidden rounded-none hover:-translate-y-1 hover:border-accent/50 hover:glass-card-hover"
                         >
                           <div className="overflow-hidden">
                             <img
@@ -594,15 +676,13 @@ function Home() {
           <SectionHeader
             eyebrow="Explore"
             title="Discover the Ancient Kingdom"
-            description="Step beyond the resort and into 2,000 years of Sri Lankan heritage."
+            description="Step beyond the resort and into 2,000 years of Sri Lankan heritage, and the wild landscapes that surround it."
           />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ATTRACTIONS.map((a) => (
-              <article
-                key={a.slug}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all hover:border-accent/50 hover:shadow-soft"
-              >
-                <div className="relative h-56 overflow-hidden">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {ATTRACTIONS.map((a, i) => (
+              <Reveal key={a.slug} delay={(i % 4) * 90} className="h-full">
+                <article className="group glass-card flex h-full flex-col overflow-hidden rounded-none hover:-translate-y-1 hover:border-accent/50 hover:glass-card-hover">
+                <div className="relative aspect-[10/7] overflow-hidden">
                   <img
                     src={a.image}
                     alt={a.alt}
@@ -616,47 +696,55 @@ function Home() {
                     {a.meta}
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col p-6">
-                  <h3 className="font-serif text-xl text-primary">{a.name}</h3>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-serif text-lg text-primary">{a.name}</h3>
                   <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
                     {a.tagline}
                   </p>
                   <button
                     type="button"
                     onClick={() => setAttraction(a)}
-                    className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent transition-colors hover:text-primary"
+                    className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent transition-colors hover:text-primary"
                   >
                     More Details
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </div>
-              </article>
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CLOSING CTA */}
-      <section className="relative overflow-hidden py-28 px-6">
+      {/* CLOSING CTA — full-width band; the wide collage sizes the section (no crop). */}
+      <section className="relative overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80"
-          alt=""
-          className="absolute inset-0 size-full object-cover"
+          src="/images/home/highlights.webp"
+          alt="A glimpse of Dhanora Dynasty Resort — villa and pool, suites, rooftop terrace, garden pavilion, fitness centre and lounge spaces"
+          width={1997}
+          height={788}
+          loading="lazy"
+          decoding="async"
+          className="block w-full"
         />
-        {/* Gradient scrim rather than a flat wash — keeps the photo readable underneath
-            while holding AA contrast for the ivory copy. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-deep/80 via-charcoal/70 to-charcoal-deep/85" />
-        <div className="relative z-10 mx-auto max-w-3xl text-center text-ivory">
-          <p className="eyebrow mb-4">Begin Your Journey</p>
-          <h2 className="font-serif text-4xl md:text-5xl mb-6">Begin Your Royal Journey</h2>
-          <p className="text-ivory/85 text-lg leading-relaxed">
+        {/* Layered scrim — a base wash plus a centre-weighted radial darkening so the copy
+            stays crisp while the collage still reads at the edges. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal-deep/70 via-charcoal/55 to-charcoal-deep/75" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(13,10,9,0.72)_0%,rgba(13,10,9,0.35)_45%,transparent_75%)]" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center text-ivory [text-shadow:0_2px_16px_rgba(0,0,0,0.65)]">
+          <p className="eyebrow mb-2 sm:mb-4">Begin Your Journey</p>
+          <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl mb-2 sm:mb-5">
+            Begin Your Royal Journey
+          </h2>
+          <p className="hidden max-w-2xl text-ivory/90 leading-relaxed sm:block sm:text-lg">
             Discover the perfect blend of luxury, comfort, and hospitality at Dhanora Dynasty
             Resort. Let us create unforgettable memories for you.
           </p>
-          <div className="mt-10">
+          <div className="mt-4 sm:mt-9">
             <Link
               to="/contact"
-              className="rounded-full bg-accent px-9 py-4 font-medium text-charcoal hover:bg-accent-soft transition-colors"
+              className="rounded-full bg-accent px-6 py-3 font-medium text-charcoal transition-colors hover:bg-accent-soft sm:px-9 sm:py-4"
             >
               Make an Inquiry
             </Link>
@@ -674,7 +762,7 @@ function Home() {
             aria-modal="true"
             aria-labelledby="attraction-title"
             onClick={(e) => e.stopPropagation()}
-            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-surface shadow-elegant"
+            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-none bg-surface shadow-elegant md:flex-row"
           >
             <button
               type="button"
@@ -685,42 +773,45 @@ function Home() {
               <X className="size-5" />
             </button>
 
-            <img
-              src={attraction.image}
-              alt={attraction.alt}
-              className="h-64 w-full object-cover sm:h-72"
-            />
+            <div className="shrink-0 md:w-1/2">
+              <AttractionGallery key={attraction.slug} attraction={attraction} />
+            </div>
 
-            <div className="p-8">
-              <p className="eyebrow mb-2">{attraction.meta}</p>
-              <h3 id="attraction-title" className="mb-4 font-serif text-3xl text-primary">
+            <div className="overflow-y-auto p-6 md:w-1/2">
+              <p className="eyebrow mb-1.5">{attraction.meta}</p>
+              <h3 id="attraction-title" className="mb-2.5 font-serif text-2xl text-primary">
                 {attraction.name}
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-2.5">
                 {attraction.details.map((para, i) => (
-                  <p key={i} className="leading-relaxed text-muted-foreground">
+                  <p key={i} className="text-sm leading-relaxed text-muted-foreground">
                     {para}
                   </p>
                 ))}
               </div>
 
-              <dl className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+              <dl className="mt-5 grid gap-px overflow-hidden rounded-none border border-border bg-border">
                 {attraction.facts.map((f) => (
-                  <div key={f.label} className="bg-surface p-4">
+                  <div
+                    key={f.label}
+                    className="flex flex-wrap items-baseline justify-between gap-x-4 bg-surface px-4 py-2.5"
+                  >
                     <dt className="text-xs tracking-widest text-muted-foreground uppercase">
                       {f.label}
                     </dt>
-                    <dd className="mt-1 text-sm font-medium text-primary">{f.value}</dd>
+                    <dd className="text-sm font-medium text-primary">{f.value}</dd>
                   </div>
                 ))}
               </dl>
 
               <a
-                href="https://maps.google.com/?q=Anuradhapura+Sacred+City"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  attraction.mapQuery ?? `${attraction.name}, Anuradhapura, Sri Lanka`,
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-medium text-charcoal transition-colors hover:bg-accent-soft"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-charcoal transition-colors hover:bg-accent-soft"
               >
                 <MapPin className="size-4" />
                 View on the map

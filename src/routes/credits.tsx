@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { PageHero } from "../components/site/Section";
-import { ATTRACTION_CREDITS } from "../lib/credits";
+import { ATTRACTION_CREDITS, DISH_CREDITS } from "../lib/credits";
 
 const HERO =
   "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1920&q=80";
@@ -55,7 +55,7 @@ function Credits() {
             Anuradhapura heritage &amp; reservoirs
           </h2>
 
-          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+          <ul className="divide-y divide-border overflow-hidden rounded-none border border-border bg-surface">
             {ATTRACTION_CREDITS.map((c) => (
               <li key={c.title} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-5">
                 <span className="font-medium text-primary">{c.title}</span>
@@ -88,6 +88,41 @@ function Credits() {
             ))}
           </ul>
 
+          {DISH_CREDITS.length > 0 && (
+            <>
+              <h2 className="mt-12 mb-6 font-serif text-2xl text-primary">Food photography</h2>
+
+              <ul className="divide-y divide-border overflow-hidden rounded-none border border-border bg-surface">
+                {DISH_CREDITS.map((c) => (
+                  <li key={c.title} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-5">
+                    <span className="font-medium text-primary">{c.title}</span>
+                    <span className="text-sm text-muted-foreground">by {c.author}</span>
+                    <span className="ml-auto flex items-center gap-3 text-sm">
+                      <a
+                        href={c.licenseUrl}
+                        target="_blank"
+                        rel="noopener noreferrer license"
+                        className="text-accent underline-offset-2 hover:underline"
+                      >
+                        {c.license}
+                      </a>
+                      <a
+                        href={c.source}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Source for ${c.title} on Wikimedia Commons`}
+                        className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        Source
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
           <h2 className="mt-12 mb-4 font-serif text-2xl text-primary">Other imagery</h2>
           <div className="space-y-4 text-muted-foreground">
             <p className="leading-relaxed">
@@ -99,9 +134,19 @@ function Credits() {
                 className="text-accent underline-offset-2 hover:underline"
               >
                 Unsplash
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://www.pexels.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline-offset-2 hover:underline"
+              >
+                Pexels
               </a>
-              , which grants a free licence for commercial use without attribution. We are
-              progressively replacing these with photography of the resort itself.
+              , which grant a free licence for commercial use without attribution, along with
+              photography of the resort and its surroundings. We are progressively replacing the
+              stock imagery with photography of the resort itself.
             </p>
             <p className="leading-relaxed">
               The Booking.com, Agoda and Tripadvisor logos are trademarks of their respective

@@ -16,7 +16,7 @@ function WhatsAppMark({ className }: { className?: string }) {
 const DIRECT = {
   href: "https://wa.me/94769725255",
   label: "Book Direct",
-  note: "WhatsApp us — best rate, no fees",
+  note: "WhatsApp us, best rate, no fees",
 };
 
 /**
@@ -100,7 +100,7 @@ export function BookNow({ className, up = false, align = "right", fluid = false 
         <div
           role="menu"
           aria-label="Booking options"
-          className={`absolute z-[70] overflow-hidden rounded-2xl border border-border bg-surface p-3 text-left shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45)] ${placement} ${
+          className={`absolute z-[70] overflow-hidden rounded-none border border-border bg-surface p-3 text-left shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45)] ${placement} ${
             up ? "bottom-full mb-3 origin-bottom" : "top-full mt-3 origin-top"
           } animate-fade-up`}
         >
