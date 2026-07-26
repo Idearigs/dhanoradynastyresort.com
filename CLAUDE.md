@@ -16,11 +16,17 @@ manage the **menu** and **gallery (hotel photos)**.
 - **React Query** (`@tanstack/react-query`) for data fetching
 - **react-hook-form** + **zod** for forms
 - Package manager: **bun**
-- Backend (to be built in this same app): PostgreSQL + Prisma, session auth (argon2), images
-  stored on the VPS. Hosted on a VPS (PM2 + nginx + SSL). See `docs/PROJECT-PLAN.md`.
+- Hosting: **shared hosting (cPanel / FTP, no Node runtime).** The public site ships as a
+  **static prerendered build** of this app (`npm run build` → `dist/client/`, deployed to
+  `public_html`). See `docs/DEPLOY.md`.
+- Backend: **plain PHP + MySQL** under `/api` (no Composer), session auth (argon2id), images
+  uploaded via PHP to `/uploads/` and served by Apache. See `docs/PROJECT-PLAN.md`.
 
-> Architecture decision: we keep TanStack Start (it already does SSR + has a sitemap route) —
-> **no Next.js port**. Admin + API are built as server routes inside this app.
+> Architecture decision: we keep TanStack Start — **no Next.js port** — but **prerender it to
+> static HTML** for shared hosting (config in `vite.config.ts`: `prerender`, `sitemap`, `pages`).
+> The admin API is a **separate PHP app**, not TanStack server routes (shared hosting has no Node).
+> Menu/gallery/rooms are baked into the static pages at build time *and* re-fetched client-side;
+> a "Publish" button rebuilds + FTP-deploys via GitHub Actions.
 
 ## Commands
 

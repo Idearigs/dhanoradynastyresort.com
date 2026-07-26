@@ -1,0 +1,88 @@
+# Dhanora Dynasty Resort — Apache config for the static (prerendered) site on shared hosting.
+# This file is copied verbatim into dist/client at build time and belongs in public_html/.
+
+# ----------------------------------------------------------------------------
+# Pretty URLs — serve prerendered pages from their subfolder index.html WITHOUT
+# the default trailing-slash redirect. So /menu serves /menu/index.html directly,
+# and internal links like <a href="/menu"> resolve in one hit (no 301 to /menu/).
+# ----------------------------------------------------------------------------
+# No directory listings.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # If an exact file exists (asset, image, /api/*, /uploads/*, sitemap.xml), serve it as-is.
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # Map "/menu" (or "/menu/") to the prerendered "/menu/index.html" — one hit, no trailing-
+  # slash redirect. The root "/" falls through to DirectoryIndex (serves /index.html).
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+?)/?$ /$1/index.html [L]
+</IfModule>
+
+# Don't 301 directories to add a trailing slash — the rewrite above already resolves them.
+<IfModule mod_dir.c>
+  DirectorySlash Off
+  DirectoryIndex index.html
+</IfModule>
+
+# Real 404 for unknown paths (keeps crawlers honest — no soft-404s).
+ErrorDocument 404 /404.html
+
+# ----------------------------------------------------------------------------
+# Canonical host + HTTPS. Enable AFTER the domain + SSL are live on the host.
+# Pick ONE canonical host; this redirects the bare domain to www + HTTPS to match
+# the sitemap host. Uncomment to activate.
+# ----------------------------------------------------------------------------
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} !=on [OR]
+#   RewriteCond %{HTTP_HOST} !^www\. [NC]
+#   RewriteRule ^ https://www.dhanoradynastyresort.com%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# ----------------------------------------------------------------------------
+# Compression
+# ----------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml application/xml
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# Caching — fingerprinted assets are immutable; HTML must always revalidate so
+# a fresh "publish" (re-uploaded HTML) is picked up immediately.
+# ----------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Hashed build assets (…/assets/index-AbC123.js) never change → cache hard.
+  <FilesMatch "\.(js|css|woff2?|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Media
+  <FilesMatch "\.(webp|jpe?g|png|gif|svg|avif|mp4|webm)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # HTML pages — always revalidate so content edits go live on next request.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # Sitemap / robots — short cache.
+  <FilesMatch "\.(xml|txt)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# Basic security headers
+# ----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
