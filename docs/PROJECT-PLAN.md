@@ -2,7 +2,22 @@
 
 Renewing the existing site (https://www.dhanoradynastyresort.com/) — current site is
 not user-friendly and looks dated. Goal: modern, fast, **SEO-friendly** resort site with a
-**secure admin panel** to manage the **menu** and **gallery**.
+**secure admin panel** to manage the **menu**, **gallery**, and **rooms**.
+
+> ⚠️ **Hosting/stack changed (2026-07-26).** The "Decisions (locked)" and "Architecture"
+> sections below describe the *original* target (Next.js port, VPS, PostgreSQL + Prisma) and are
+> **superseded**. The site is being shipped on **shared hosting (cPanel / FTP, no Node)**:
+>
+> - **Frontend:** keep **TanStack Start**, prerendered to **static HTML** (no Node on the host).
+> - **Backend:** **plain PHP + MySQL** under `/api` (no Composer); auth via PHP sessions + argon2id.
+> - **Images:** PHP upload → `/uploads/`, served by Apache (resize/webp via GD/Imagick).
+> - **Admin** manages **Menu + Gallery + Rooms**.
+> - **Content/SEO:** menu/gallery/rooms baked into the static HTML at build time *and* re-fetched
+>   client-side; a "Publish" button rebuilds + FTP-deploys via GitHub Actions.
+>
+> See **`docs/DEPLOY.md`** for the build/deploy flow. The data model below still holds (now in
+> **MySQL** instead of Postgres). Phases: (1) static frontend ✅, (2) PHP+MySQL API, (3) admin
+> panel, (4) live data + publish pipeline.
 
 ## Team & ways of working
 
