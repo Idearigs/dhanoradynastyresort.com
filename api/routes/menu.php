@@ -102,7 +102,7 @@ function menu_public_read(): void
     )->fetchAll();
 
     $itemStmt = db()->prepare(
-        'SELECT id, group_name, name, slug, description
+        'SELECT id, group_name, name, slug, description, image_src, image_alt
            FROM menu_items
           WHERE category_id = ? AND is_available = 1
           ORDER BY sort_order, id'
@@ -118,6 +118,8 @@ function menu_public_read(): void
                 'name'        => $i['name'],
                 'slug'        => $i['slug'],
                 'description' => $i['description'],
+                // Per-dish photo; null lets the frontend fall back to the category banner.
+                'image'       => $i['image_src'] ? ['src' => $i['image_src'], 'alt' => $i['image_alt']] : null,
             ];
         }, $itemStmt->fetchAll());
 
@@ -226,6 +228,8 @@ function menu_item_shape(array $i): array
         'slug'        => $i['slug'],
         'description' => $i['description'],
         'price'       => $i['price'] !== null ? (float) $i['price'] : null,
+        'imageSrc'    => $i['image_src'],
+        'imageAlt'    => $i['image_alt'],
         'isAvailable' => (bool) $i['is_available'],
         'sortOrder'   => (int) $i['sort_order'],
     ];
@@ -241,8 +245,8 @@ function menu_create_item(): void
     $name = field_string($b, 'name', true, 190);
 
     $stmt = db()->prepare(
-        'INSERT INTO menu_items (category_id, group_name, name, slug, description, price, is_available, sort_order)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+        'INSERT INTO menu_items (category_id, group_name, name, slug, description, price, image_src, image_alt, is_available, sort_order)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     );
     $stmt->execute([
         $categoryId,
@@ -251,6 +255,8 @@ function menu_create_item(): void
         field_string($b, 'slug') ?? make_slug($name),
         field_string($b, 'description', false, 2000),
         field_decimal($b, 'price'),
+        field_string($b, 'imageSrc', false, 255),
+        field_string($b, 'imageAlt', false, 255),
         field_bool($b, 'isAvailable', true) ? 1 : 0,
         field_int($b, 'sortOrder') ?? 0,
     ]);
@@ -269,7 +275,7 @@ function menu_update_item(int $id): void
     $stmt = db()->prepare(
         'UPDATE menu_items
             SET category_id = ?, group_name = ?, name = ?, slug = ?, description = ?,
-                price = ?, is_available = ?, sort_order = ?
+                price = ?, image_src = ?, image_alt = ?, is_available = ?, sort_order = ?
           WHERE id = ?'
     );
     $stmt->execute([
@@ -279,6 +285,8 @@ function menu_update_item(int $id): void
         field_string($b, 'slug') ?? make_slug($name),
         field_string($b, 'description', false, 2000),
         field_decimal($b, 'price'),
+        field_string($b, 'imageSrc', false, 255),
+        field_string($b, 'imageAlt', false, 255),
         field_bool($b, 'isAvailable', true) ? 1 : 0,
         field_int($b, 'sortOrder') ?? 0,
         $id,

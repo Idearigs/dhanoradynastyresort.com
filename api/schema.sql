@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS menu_items (
   slug         VARCHAR(210) NOT NULL,
   description  TEXT NULL,
   price        DECIMAL(10,2) NULL,           -- LKR; NULL = unpriced. Not shown publicly.
+  image_src    VARCHAR(255) NULL,            -- per-dish photo; NULL falls back to the category banner
+  image_alt    VARCHAR(255) NULL,
   is_available TINYINT(1) NOT NULL DEFAULT 1,
   sort_order   INT NOT NULL DEFAULT 0,
   created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

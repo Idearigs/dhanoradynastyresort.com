@@ -50,8 +50,8 @@ Auth:
 Admin (all require a logged-in session; **writes also require the
 `X-CSRF-Token` header**):
 
-- Menu categories: `GET/POST /api/menu/categories`, `PUT/DELETE /api/menu/categories/{id}`
-- Menu items: `GET /api/menu/items[?category=ID]`, `POST /api/menu/items`, `PUT/DELETE /api/menu/items/{id}`
+- Menu categories: `GET/POST /api/menu/categories`, `PUT/DELETE /api/menu/categories/{id}` — a category carries `imageSrc`/`imageAlt` (its banner).
+- Menu items: `GET /api/menu/items[?category=ID]`, `POST /api/menu/items`, `PUT/DELETE /api/menu/items/{id}` — an item carries `imageSrc`/`imageAlt` (its dish photo; null falls back to the category banner).
 - Gallery: `GET /api/gallery?all=1`, `POST /api/gallery`, `PUT/DELETE /api/gallery/{id}`
 - Rooms: `GET /api/rooms?all=1`, `POST /api/rooms`, `PUT/DELETE /api/rooms/{id}`
 - Room images: `POST /api/rooms/{id}/images`, `DELETE /api/rooms/{id}/images/{imageId}`

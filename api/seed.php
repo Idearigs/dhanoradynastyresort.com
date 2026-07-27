@@ -81,9 +81,13 @@ $catStmt = $pdo->prepare(
      VALUES (?, ?, ?, ?, ?, 1)'
 );
 $itemStmt = $pdo->prepare(
-    'INSERT INTO menu_items (category_id, group_name, name, slug, description, price, is_available, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?, 1, ?)'
+    'INSERT INTO menu_items (category_id, group_name, name, slug, description, price, image_src, image_alt, is_available, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)'
 );
+
+// Dishes that ship with their own photo at public/images/dishes/<slug>.webp
+// (mirrors DISH_IMAGES in src/lib/menu.ts). Others fall back to the category banner.
+$dishImages = dish_image_slugs();
 
 $catOrder = 0;
 $itemCount = 0;
@@ -93,7 +97,10 @@ foreach ($menu as $cat) {
     $categoryId = (int) $pdo->lastInsertId();
     $order = 0;
     foreach ($items as [$group, $itemName, $desc, $price]) {
-        $itemStmt->execute([$categoryId, $group, $itemName, make_slug($itemName), $desc, $price, $order++]);
+        $slug = make_slug($itemName);
+        $dishSrc = in_array($slug, $dishImages, true) ? "/images/dishes/$slug.webp" : null;
+        $dishAlt = $dishSrc !== null ? $itemName : null;
+        $itemStmt->execute([$categoryId, $group, $itemName, $slug, $desc, $price, $dishSrc, $dishAlt, $order++]);
         $itemCount++;
     }
 }
@@ -316,5 +323,32 @@ function gallery_seed_data(): array
         ['cat' => 'Grounds',  'caption' => 'Lakeside View',        'src' => 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&q=80'],
         ['cat' => 'Dining',   'caption' => 'Tea Service',          'src' => 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=1200&q=80'],
         ['cat' => 'Rooms',    'caption' => 'Deluxe Family Room',   'src' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80'],
+    ];
+}
+
+/** Dish slugs that have a photo at public/images/dishes/<slug>.webp (mirrors src/lib/menu.ts DISH_IMAGES). */
+function dish_image_slugs(): array
+{
+    return [
+        'a-full-english', 'avocado-juice', 'avocado-toast', 'batter-fried-calamari',
+        'black-pork-curry-with-coconut-roti', 'black-tea', 'caff-americano', 'cappuccino',
+        'chef-salad', 'chicken-alfredo', 'chicken-biriyani', 'chicken-devilled', 'chicken-kottu',
+        'chicken-noodles', 'chicken-nuggets-home-made-fries', 'coca-cola', 'coleslaw-salad',
+        'cream-cheese-pasta', 'cream-soda', 'crumbed-fried-chicken', 'crumbed-fried-fish',
+        'curd-with-honey', 'deep-fried-banana-fritters', 'double-espresso', 'dragon-fruit-juice',
+        'egg-fried-rice', 'espresso', 'fish-and-chips', 'fish-devilled', 'fish-rolls',
+        'french-fries', 'fresh-fruit-platter', 'fried-beef', 'fried-chicken', 'fruit-juice',
+        'fruit-plate', 'ginger-beer', 'green-salad', 'green-tea', 'grilled-chicken', 'grilled-fish',
+        'herbal-porridge', 'king-coconut', 'latte-macchiato', 'lemon-marinated-mixed-seafood-salad',
+        'lime-juice', 'milk-rice', 'milk-tea', 'mixed-fruit-juice', 'necto', 'nutella-roti',
+        'pancake', 'papaya-juice', 'passion-fruit-juice', 'pol-roti', 'pork-devilled',
+        'prawn-devilled', 'pumpkin-soup-platter', 'rice-curry-with-four-vegetables',
+        'roasted-cashews', 'sausage-devilled', 'selection-of-ice-cream', 'soda',
+        'spaghetti-carbonara', 'spicy-chicken-fried-rice', 'spicy-chilli-prawn-pasta', 'sprite',
+        'sri-lankan-rice-curry', 'steamed-rice', 'string-hoppers', 'super-green-omelette',
+        'the-b-b-q', 'thosai', 'toast-with-butter-jam', 'traditional-prawn-curry',
+        'vegetable-fried-rice', 'vegetable-kottu', 'vegetable-noodles', 'vegetable-pakora',
+        'vegetable-pasta', 'waffles', 'watalappam', 'watermelon-juice', 'white-basmati-rice',
+        'white-rice', 'yellow-rice', 'yellow-rice-beetroot',
     ];
 }
