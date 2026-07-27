@@ -18,6 +18,7 @@ dist/client/
   gallery/index.html    # /gallery
   contact/index.html    # /contact
   credits/index.html    # /credits  (noindex; not in sitemap)
+  admin/index.html      # /admin    (noindex; not in sitemap — client-only shell, boots against /api)
   assets/               # hashed JS/CSS (cache-forever)
   images/  videos/      # static media committed to the repo
   sitemap.xml           # generated, absolute URLs
@@ -28,20 +29,24 @@ Config that makes this work lives in `vite.config.ts` (`prerender`, `sitemap`, `
 
 ## Server layout (public_html)
 
-Upload the **contents of `dist/client/`** into `public_html/`. Phase 2 adds two siblings that
-are **not** produced by the build and must be preserved across deploys:
+Upload the **contents of `dist/client/`** into `public_html/`. The **admin panel UI ships as
+part of the build** (`dist/client/admin/index.html`, replaced every deploy). Phase 2 adds two
+siblings that are **not** produced by the build and must be preserved across deploys:
 
 ```
 public_html/
-  index.html, about/, menu/, assets/, …   ← from dist/client (replaced every deploy)
+  index.html, about/, menu/, admin/, assets/, …  ← from dist/client (replaced every deploy)
   sitemap.xml robots.txt 404.html .htaccess
   api/        ← plain PHP endpoints + MySQL config   (Phase 2 — do NOT overwrite)
   uploads/    ← images uploaded via the admin panel  (Phase 2 — do NOT overwrite)
-  admin/      ← admin panel                           (Phase 3)
 ```
 
-> ⚠️ A deploy must only replace the static site files. Never delete `api/`, `uploads/`, or
-> `admin/`. The GitHub Action (Phase 4) is scoped to the static paths for this reason.
+> ⚠️ A deploy must only replace the static site files (which now include `admin/`). Never delete
+> `api/` or `uploads/`. The GitHub Action (Phase 4) is scoped to the static paths for this reason.
+>
+> The admin UI is a **client-only React shell** at `/admin`: it's `noindex`, absent from the
+> sitemap, and fetches everything from `/api` after it loads. It shares the site's origin, so the
+> session cookie and CSRF just work — no CORS config needed in production.
 
 ## Manual deploy (now)
 
