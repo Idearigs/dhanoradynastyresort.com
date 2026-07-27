@@ -60,8 +60,9 @@ if ($hasContent && !$force) {
     exit(0);
 }
 
-$pdo->beginTransaction();
-
+// Wipe BEFORE opening the transaction: `ALTER TABLE ... AUTO_INCREMENT` is DDL
+// and causes an implicit commit in MySQL, which would end a transaction early
+// and make the final commit() fail.
 if ($force) {
     $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
     foreach (['room_images', 'menu_items', 'gallery_images', 'menu_categories', 'rooms'] as $t) {
@@ -71,6 +72,8 @@ if ($force) {
     $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
     echo "Wiped existing content.\n";
 }
+
+$pdo->beginTransaction();
 
 // --- Menu --------------------------------------------------------------------
 // [category name, image src, image alt, [ [group|null, name, description|null, price|null], ... ]]
