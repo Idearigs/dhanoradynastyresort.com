@@ -44,5 +44,8 @@ Thumbs.db
 # Claude local settings (keep local, not shared)
 .claude/settings.local.json
 
-# Uploads (resort images live on the VPS, not in git)
+# Uploads (resort images live on the server, not in git)
 /uploads/
+
+# API secrets — real DB credentials live only on the server
+/api/config.php

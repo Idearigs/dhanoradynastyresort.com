@@ -1,0 +1,36 @@
+# Dhanora Dynasty Resort — API (plain PHP). Lives at public_html/api/.
+# Every /api/* request is routed to index.php, which dispatches by method+path.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /api/
+
+  # Never rewrite requests for real files (index.php itself, etc.).
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else → front controller. QSA keeps ?query strings.
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Deny direct web access to config, libraries, schema and seed scripts.
+# Only index.php should be reachable over HTTP.
+<FilesMatch "\.(sql)$">
+  Require all denied
+</FilesMatch>
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "config.example.php">
+  Require all denied
+</Files>
+<Files "seed.php">
+  Require all denied
+</Files>
+
+# The lib/ directory is include-only — block it entirely.
+RedirectMatch 403 ^/api/lib/.*$
+
+# No directory listings.
+Options -Indexes
