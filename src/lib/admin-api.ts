@@ -81,6 +81,9 @@ export type MenuItem = {
   slug: string;
   description: string | null;
   price: number | null;
+  /** Per-dish photo; null falls back to the category banner on the public site. */
+  imageSrc: string | null;
+  imageAlt: string | null;
   isAvailable: boolean;
   sortOrder: number;
 };

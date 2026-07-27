@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { ImageIcon, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { menuApi, type MenuCategory, type MenuItem } from "@/lib/admin-api";
 import { Field, Loading, ErrorBox } from "./ui";
+import { UploadField } from "./UploadField";
+import { CategoryDialog } from "./MenuCategoryDialog";
 
 type Draft = {
   categoryId: number;
@@ -29,6 +31,8 @@ type Draft = {
   name: string;
   description: string;
   price: string;
+  imageSrc: string;
+  imageAlt: string;
   isAvailable: boolean;
   sortOrder: number;
 };
@@ -39,6 +43,8 @@ const emptyDraft = (categoryId: number): Draft => ({
   name: "",
   description: "",
   price: "",
+  imageSrc: "",
+  imageAlt: "",
   isAvailable: true,
   sortOrder: 0,
 });
@@ -51,6 +57,7 @@ export function MenuManager() {
   const [editing, setEditing] = useState<MenuItem | null>(null);
   const [creating, setCreating] = useState(false);
   const [draft, setDraft] = useState<Draft>(emptyDraft(0));
+  const [editCategory, setEditCategory] = useState<MenuCategory | null>(null);
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin", "menu", "items"] });
@@ -64,6 +71,8 @@ export function MenuManager() {
         name: draft.name.trim(),
         description: draft.description.trim() || null,
         price: draft.price.trim() === "" ? null : Number(draft.price),
+        imageSrc: draft.imageSrc.trim() || null,
+        imageAlt: draft.imageAlt.trim() || null,
         isAvailable: draft.isAvailable,
         sortOrder: draft.sortOrder,
       };
@@ -100,6 +109,8 @@ export function MenuManager() {
       name: item.name,
       description: item.description ?? "",
       price: item.price === null ? "" : String(item.price),
+      imageSrc: item.imageSrc ?? "",
+      imageAlt: item.imageAlt ?? "",
       isAvailable: item.isAvailable,
       sortOrder: item.sortOrder,
     });
@@ -133,15 +144,30 @@ export function MenuManager() {
         return (
           <section key={cat.id} className="rounded-lg border bg-card">
             <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-              <h2 className="font-serif text-lg text-[#441C1A]">
-                {cat.name}
-                <span className="ml-2 text-sm font-sans text-muted-foreground">
-                  {list.length} {list.length === 1 ? "dish" : "dishes"}
-                </span>
-              </h2>
-              <Button size="sm" variant="outline" onClick={() => openNew(cat.id)}>
-                <Plus className="size-4" /> Add dish
-              </Button>
+              <div className="flex min-w-0 items-center gap-3">
+                {/* Category banner thumbnail (shown behind the section heading on the public menu). */}
+                <div className="hidden size-12 shrink-0 overflow-hidden rounded-md border bg-muted sm:grid sm:place-items-center">
+                  {cat.imageSrc ? (
+                    <img src={cat.imageSrc} alt={cat.imageAlt ?? ""} className="size-full object-cover" />
+                  ) : (
+                    <ImageIcon className="size-5 text-muted-foreground" />
+                  )}
+                </div>
+                <h2 className="min-w-0 truncate font-serif text-lg text-[#441C1A]">
+                  {cat.name}
+                  <span className="ml-2 text-sm font-sans text-muted-foreground">
+                    {list.length} {list.length === 1 ? "dish" : "dishes"}
+                  </span>
+                </h2>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                <Button size="sm" variant="ghost" onClick={() => setEditCategory(cat)}>
+                  <ImageIcon className="size-4" /> Banner
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => openNew(cat.id)}>
+                  <Plus className="size-4" /> Add dish
+                </Button>
+              </div>
             </div>
             <ul className="divide-y">
               {list.length === 0 && (
@@ -149,6 +175,13 @@ export function MenuManager() {
               )}
               {list.map((item) => (
                 <li key={item.id} className="flex items-center gap-3 px-4 py-2.5">
+                  <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-md border bg-muted">
+                    {item.imageSrc ? (
+                      <img src={item.imageSrc} alt="" className="size-full object-cover" />
+                    ) : (
+                      <ImageIcon className="size-4 text-muted-foreground/60" />
+                    )}
+                  </div>
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-2 truncate font-medium">
                       {item.name}
@@ -239,6 +272,24 @@ export function MenuManager() {
               />
             </Field>
 
+            <Field label="Dish photo (optional)" hint="Falls back to the category banner if left empty.">
+              <UploadField
+                value={draft.imageSrc}
+                onChange={(src) => setDraft((d) => ({ ...d, imageSrc: src }))}
+                dir="menu"
+              />
+            </Field>
+
+            {draft.imageSrc.trim() !== "" && (
+              <Field label="Photo alt text" hint="Describes the photo for search engines & screen readers.">
+                <Input
+                  value={draft.imageAlt}
+                  onChange={(e) => setDraft((d) => ({ ...d, imageAlt: e.target.value }))}
+                  placeholder={draft.name || "e.g. Grilled chicken with garlic rice"}
+                />
+              </Field>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <Field label="Price (Rs, optional)" hint="Not shown on the public site.">
                 <Input
@@ -281,6 +332,15 @@ export function MenuManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <CategoryDialog
+        category={editCategory}
+        onClose={() => setEditCategory(null)}
+        onSaved={() => {
+          setEditCategory(null);
+          qc.invalidateQueries({ queryKey: ["admin", "menu", "categories"] });
+        }}
+      />
     </div>
   );
 }
