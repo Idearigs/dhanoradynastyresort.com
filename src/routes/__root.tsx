@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -126,12 +127,25 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // The admin panel (/admin) is a self-contained app — it must not render the
+  // public site chrome (navbar, footer, WhatsApp/scroll floats). Gate on the path.
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
   }, []);
+
+  if (isAdmin) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

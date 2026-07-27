@@ -19,7 +19,14 @@ export default defineConfig({
     // hosting). `host` makes the <loc> URLs absolute, as Google requires. Keep this in sync
     // with the canonical host enforced in public/.htaccess.
     sitemap: { enabled: true, host: "https://www.dhanoradynastyresort.com" },
-    // /credits carries a noindex robots meta (image attributions), so keep it out of the sitemap.
-    pages: [{ path: "/credits", sitemap: { exclude: true } }],
+    // Per-page overrides:
+    // - /credits carries a noindex robots meta (image attributions), keep it out of the sitemap.
+    // - /admin is the private admin panel: force a static shell to be emitted (it isn't linked
+    //   from any public page, so the crawler never reaches it), keep it noindex + out of the
+    //   sitemap. The shell boots client-side and talks to /api — no data is baked in at build.
+    pages: [
+      { path: "/credits", sitemap: { exclude: true } },
+      { path: "/admin", sitemap: { exclude: true } },
+    ],
   },
 });
