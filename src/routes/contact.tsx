@@ -138,8 +138,8 @@ function Contact() {
           </div>
 
           {/* Details */}
-          <div className="space-y-6">
-            <div className="rounded-none bg-primary text-ivory p-10 shadow-elegant">
+          <div className="h-full space-y-6">
+            <div className="flex h-full flex-col rounded-none bg-primary text-ivory p-10 shadow-elegant">
               <p className="eyebrow mb-3">Get in Touch</p>
               <h2 className="font-serif text-3xl mb-8">Our Details</h2>
 
@@ -185,7 +185,7 @@ function Contact() {
                 href="https://wa.me/94769725255"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-primary-dark font-medium hover:bg-accent-soft transition-colors"
+                className="mt-auto inline-flex items-center gap-2 self-start rounded-full bg-accent px-6 py-3 text-primary-dark font-medium hover:bg-accent-soft transition-colors"
               >
                 Chat on WhatsApp
               </a>

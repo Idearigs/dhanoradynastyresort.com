@@ -10,6 +10,36 @@ type Item = { src: string; cat: "Rooms" | "Dining" | "Grounds" | "Wellness"; cap
 
 const items: Item[] = [
   {
+    src: "/images/gallery/aerial.webp",
+    cat: "Grounds",
+    caption: "Aerial View of the Grounds",
+  },
+  {
+    src: "/images/gallery/greenery.webp",
+    cat: "Grounds",
+    caption: "Tropical Greenery",
+  },
+  {
+    src: "/images/gallery/pavilion.webp",
+    cat: "Grounds",
+    caption: "Open-Air Bamboo Pavilion",
+  },
+  {
+    src: "/images/gallery/pink-fence.webp",
+    cat: "Grounds",
+    caption: "Painted Garden Pavilion",
+  },
+  {
+    src: "/images/gallery/brick-pavilion.webp",
+    cat: "Grounds",
+    caption: "Brick-and-Timber Pavilion",
+  },
+  {
+    src: "/images/gallery/foliage.webp",
+    cat: "Grounds",
+    caption: "Tropical Blooms",
+  },
+  {
     src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80",
     cat: "Rooms",
     caption: "Twin Bed Room",
@@ -72,8 +102,6 @@ const items: Item[] = [
 ];
 
 const cats = ["All", "Rooms", "Dining", "Grounds", "Wellness"] as const;
-
-const heights = ["h-64", "h-80", "h-72", "h-96", "h-60", "h-80"];
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -146,7 +174,7 @@ function Gallery() {
                   src={item.src}
                   alt={item.caption}
                   loading="lazy"
-                  className={`w-full ${heights[i % heights.length]} object-cover transition-transform duration-700 group-hover:scale-110`}
+                  className="w-full h-auto transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 flex items-end bg-gradient-to-t from-primary-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="p-5 text-left text-ivory">

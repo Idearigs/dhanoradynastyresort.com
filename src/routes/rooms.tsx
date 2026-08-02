@@ -270,8 +270,10 @@ function Rooms() {
       {/* CTA */}
       <section className="relative overflow-hidden py-24 px-6">
         <img
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80"
+          src="/images/home/highlights.webp"
           alt=""
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 size-full object-cover"
         />
         {/* Gradient scrim rather than a flat wash — keeps the photo readable underneath
