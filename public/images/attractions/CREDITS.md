@@ -53,6 +53,9 @@ monuments plus 4 of the region's great reservoirs (wewa). All cropped to 1000x70
 | Wilpattu National Park | wilpattu-5.webp | Shaluka Herath | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Sri_Lankan_axis_deer_-_Wilpattu_National_park.jpg) |
 | Wilpattu National Park | wilpattu-6.webp | Shaluka Herath | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Mugger_Crocodile_-_Wilpattu_National_Park.jpg) |
 | Wilpattu National Park | wilpattu-7.webp | Shaluka Herath | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Grey-headed_Fish_Eagle_-_Wilpattu_National_Park.jpg) |
+| Sakwala Chakraya | sakwala-chakraya.webp | Kadkdesilva | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Stargate_in_Anuradhapura.jpg) |
+| Sakwala Chakraya | sakwala-chakraya-2.webp | Udeshika Jayapali | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Stone_carving_at_Ranmasu_Uyana.jpg) |
+| Sakwala Chakraya | sakwala-chakraya-3.webp | L Manju | CC BY-SA 4.0 | [Commons](https://commons.wikimedia.org/wiki/File:Ranmasu_Uyana.jpg) |
 
 ## Not included
 

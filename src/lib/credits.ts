@@ -320,4 +320,25 @@ export const ATTRACTION_CREDITS: Credit[] = [
     licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
     source: "https://commons.wikimedia.org/wiki/File:Grey-headed_Fish_Eagle_-_Wilpattu_National_Park.jpg",
   },
+  {
+    title: "Sakwala Chakraya",
+    author: "Kadkdesilva",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    source: "https://commons.wikimedia.org/wiki/File:Stargate_in_Anuradhapura.jpg",
+  },
+  {
+    title: "Sakwala Chakraya",
+    author: "Udeshika Jayapali",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    source: "https://commons.wikimedia.org/wiki/File:Stone_carving_at_Ranmasu_Uyana.jpg",
+  },
+  {
+    title: "Sakwala Chakraya",
+    author: "L Manju",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    source: "https://commons.wikimedia.org/wiki/File:Ranmasu_Uyana.jpg",
+  },
 ];

@@ -53,8 +53,12 @@ function About() {
         <div className="mx-auto max-w-7xl grid lg:grid-cols-[420px_1fr] gap-14 items-center">
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80"
+              src="/images/about/founder.webp"
               alt="Kelum Senanayaka, Founder & Managing Director"
+              width={800}
+              height={1000}
+              loading="lazy"
+              decoding="async"
               className="rounded-none object-cover w-full h-[520px] shadow-elegant"
             />
             <div className="absolute -bottom-6 -right-6 hidden md:block rounded-none bg-primary text-ivory px-6 py-4 border border-accent/40">
@@ -100,12 +104,21 @@ function About() {
         />
         <div className="mx-auto max-w-7xl grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            "https://images.unsplash.com/photo-1610552050890-fe99536c2615?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
-          ].map((src, i) => (
-            <img key={i} src={src} alt="" className="rounded-none object-cover h-56 w-full" />
+            { src: "/images/about/heritage-1.webp", alt: "Aerial view of the resort's pool, terrace and lush gardens" },
+            { src: "/images/about/heritage-2.webp", alt: "Open-plan lounge with teak furniture and a private bar" },
+            { src: "/images/about/heritage-3.webp", alt: "Private balcony with a hanging swing chair and countryside views" },
+            { src: "/images/about/heritage-4.webp", alt: "Garden swing bed shaded by tropical trees and flowering plants" },
+          ].map((img, i) => (
+            <img
+              key={i}
+              src={img.src}
+              alt={img.alt}
+              width={800}
+              height={600}
+              loading="lazy"
+              decoding="async"
+              className="rounded-none object-cover h-56 w-full"
+            />
           ))}
         </div>
       </section>

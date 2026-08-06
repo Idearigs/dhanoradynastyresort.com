@@ -187,7 +187,7 @@ function AmenityCard({
         shown ? "translate-y-0 opacity-100 hover:-translate-y-1.5" : "translate-y-8 opacity-0"
       }`}
     >
-      <div className="relative w-2/5 shrink-0 overflow-hidden sm:h-44 sm:w-full">
+      <div className="relative w-2/5 shrink-0 overflow-hidden sm:aspect-[3/2] sm:h-auto sm:w-full">
         <img
           src={img}
           alt={title}
@@ -228,7 +228,7 @@ const experiences = [
   {
     title: "Smart Kitchen & Dining",
     desc: "Experience refined cuisine prepared with innovation, quality ingredients, and exceptional service.",
-    img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+    img: "/images/amenities/smart-kitchen-dining.webp",
   },
 ];
 
@@ -413,21 +413,36 @@ function Home() {
               ))}
             </div>
           </div>
+          {/* Right images keep their true 8:5 aspect (no crop); the left image spans
+              both rows and fills the combined height — its slot ends up ~3:4, matching
+              the pavilion photo, so nothing is stretched or awkwardly cropped. */}
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80"
-              alt=""
+              src="/images/home/intro-villa.webp"
+              alt="The white villa of Dhanora Dynasty Resort with its swimming pool and flowering garden"
+              width={760}
+              height={1013}
+              loading="lazy"
+              decoding="async"
               className="rounded-none object-cover h-full w-full row-span-2"
             />
             <img
-              src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80"
-              alt=""
-              className="rounded-none object-cover h-44 w-full"
+              src="/images/home/intro-terrace.webp"
+              alt="Top-down view of the resort's pool, terrace and landscaped gardens"
+              width={800}
+              height={500}
+              loading="lazy"
+              decoding="async"
+              className="rounded-none object-cover aspect-[8/5] w-full"
             />
             <img
-              src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80"
-              alt=""
-              className="rounded-none object-cover h-44 w-full"
+              src="/images/home/intro-pavilion.webp"
+              alt="Garden dining pavilion with a tiled roof, framed by coconut palms at Dhanora Dynasty Resort"
+              width={800}
+              height={500}
+              loading="lazy"
+              decoding="async"
+              className="rounded-none object-cover aspect-[8/5] w-full"
             />
           </div>
         </div>

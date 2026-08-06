@@ -42,6 +42,12 @@ const PARTNERS = [
     logo: "/images/booking/tripadvisor.svg",
     note: "Read guest reviews, then book",
   },
+  {
+    href: "https://www.priceline.com/relax/at/601174638/from/20260806/to/20260807/rooms/1?cur=USD&cityId=5000487199",
+    name: "Priceline",
+    logo: "/images/booking/priceline.svg",
+    note: "Deals for US travellers",
+  },
 ];
 
 type Props = {

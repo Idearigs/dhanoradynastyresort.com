@@ -149,8 +149,8 @@ function Credits() {
               stock imagery with photography of the resort itself.
             </p>
             <p className="leading-relaxed">
-              The Booking.com, Agoda and Tripadvisor logos are trademarks of their respective
-              owners, shown only to indicate where our rooms may be booked.
+              The Booking.com, Agoda, Tripadvisor and Priceline logos are trademarks of their
+              respective owners, shown only to indicate where our rooms may be booked.
             </p>
           </div>
         </div>

@@ -1,16 +1,19 @@
 # Booking partner logos
 
-Official wordmarks for the three booking sites the resort is listed on, used in the
-"Book Now" modal (`src/components/site/BookingModal.tsx`).
+Official wordmarks for the four booking sites the resort is listed on, used in the
+"Book Now" modal (`src/components/site/BookNow.tsx`).
 
 | File | Owner |
 |---|---|
 | `booking.svg` | Booking.com — Booking.com B.V. |
 | `agoda.svg` | Agoda — Agoda Company Pte. Ltd. |
 | `tripadvisor.svg` | Tripadvisor — Tripadvisor LLC |
+| `priceline.svg` | Priceline — Priceline.com LLC |
 
 Sourced from Wikimedia Commons and **self-hosted** rather than hotlinked, so they work
-offline, survive a static build, and don't leak a request to a third party.
+offline, survive a static build, and don't leak a request to a third party. `priceline.svg`
+is a plain text wordmark set in a system sans-serif (no official mark was on Commons), kept
+in Priceline's navy — replace it with the official brand kit if provided.
 
 ## Why using these is fine
 

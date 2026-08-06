@@ -209,6 +209,28 @@ export const ATTRACTIONS: Attraction[] = [
     ],
   },
   {
+    slug: "sakwala-chakraya",
+    name: "Sakwala Chakraya (Stargate)",
+    tagline: "A mysterious cosmic chart in stone — Anuradhapura's 'Stargate'.",
+    meta: "Ancient, 3 km away",
+    mapQuery: "Ranmasu Uyana, Anuradhapura, Sri Lanka",
+    image: "/images/attractions/sakwala-chakraya.webp",
+    gallery: [
+      "/images/attractions/sakwala-chakraya-2.webp",
+      "/images/attractions/sakwala-chakraya-3.webp",
+    ],
+    alt: "The Sakwala Chakraya cosmic chart carved into a boulder at Ranmasu Uyana, Anuradhapura",
+    details: [
+      "Carved into a boulder at Ranmasu Uyana, the royal pleasure gardens set between Tissa Wewa and the Isurumuniya rock temple, the Sakwala Chakraya, or 'wheel of the universe' (also called the Bawa Chakraya), is a circle about six feet across, seven concentric rings crossed by a grid of lines and dotted with smaller symbols.",
+      "In his 1911 Archaeological Survey, H.C.P. Bell described it as the ancients' map of the cosmos, possibly, he suggested, one of the oldest maps in the world, echoing the cosmographical charts of early Buddhist texts. Its true purpose is still debated: some read it as a cosmological or meditation diagram, while popular lore casts it as a 'stargate', comparing it to carvings in Peru and Egypt. Among the gardens' ancient bathing ponds and rock reliefs, it is one of the sacred city's most intriguing and least understood monuments.",
+    ],
+    facts: [
+      { label: "Size", value: "About 6 ft — seven concentric rings" },
+      { label: "Recorded by", value: "H.C.P. Bell, 1911 survey" },
+      { label: "Nickname", value: "The 'Stargate' of Anuradhapura" },
+    ],
+  },
+  {
     slug: "kuttam-pokuna",
     name: "Kuttam Pokuna",
     tagline: "The elegant Twin Ponds of the ancient monks.",
